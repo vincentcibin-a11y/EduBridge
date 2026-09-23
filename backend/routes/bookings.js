@@ -1,6 +1,7 @@
 import express from "express";
 import Booking from "../models/Booking.js";
 import User from "../models/User.js";
+import Notification from "../models/Notification.js";
 import { auth } from "../middleware/auth.js";
 
 const router = express.Router();
@@ -23,6 +24,13 @@ router.post("/", auth, async (req, res) => {
     const tutorUser = await User.findById(tutor);
     if (!tutorUser) return res.status(404).json({ message: "Tutor not found" });
     const booking = await Booking.create({ learner: req.user.id, tutor, subject, mode, date, time, location, notes });
+    await Notification.create({
+      recipient: tutor,
+      type: "booking_request",
+      title: "New tutoring request",
+      message: "A student sent you a peer tutoring request.",
+      link: "/bookings"
+    });
     await booking.populate([{ path: "learner", select: "name email" }, { path: "tutor", select: "name email skills subjects" }]);
     res.status(201).json({ booking });
   } catch (e) { res.status(500).json({ message: e.message }); }
@@ -32,14 +40,30 @@ router.put("/:id/accept", auth, async (req, res) => {
   const booking = await Booking.findById(req.params.id);
   if (!booking) return res.status(404).json({ message: "Booking not found" });
   if (String(booking.tutor) !== String(req.user.id)) return res.status(403).json({ message: "Only the tutor can accept this request" });
-  booking.status = "accepted"; await booking.save(); res.json({ booking });
+  booking.status = "accepted"; await booking.save();
+  await Notification.create({
+    recipient: booking.learner,
+    type: "booking_update",
+    title: "Tutoring request accepted",
+    message: "Your peer tutor accepted the session request.",
+    link: "/bookings"
+  });
+  res.json({ booking });
 });
 
 router.put("/:id/reject", auth, async (req, res) => {
   const booking = await Booking.findById(req.params.id);
   if (!booking) return res.status(404).json({ message: "Booking not found" });
   if (String(booking.tutor) !== String(req.user.id)) return res.status(403).json({ message: "Only the tutor can reject this request" });
-  booking.status = "rejected"; await booking.save(); res.json({ booking });
+  booking.status = "rejected"; await booking.save();
+  await Notification.create({
+    recipient: booking.learner,
+    type: "booking_update",
+    title: "Tutoring request rejected",
+    message: "Your peer tutor rejected the session request.",
+    link: "/bookings"
+  });
+  res.json({ booking });
 });
 
 router.put("/:id/complete", auth, async (req, res) => {
@@ -50,6 +74,14 @@ router.put("/:id/complete", auth, async (req, res) => {
   }
   booking.status = "completed"; await booking.save();
   if (String(booking.tutor) !== String(req.user.id)) await User.findByIdAndUpdate(booking.tutor, { $inc: { reputation: 5 } });
+  const recipient = String(booking.tutor) === String(req.user.id) ? booking.learner : booking.tutor;
+  await Notification.create({
+    recipient,
+    type: "booking_update",
+    title: "Session completed",
+    message: "A tutoring session has been marked as completed.",
+    link: "/bookings"
+  });
   res.json({ booking });
 });
 
