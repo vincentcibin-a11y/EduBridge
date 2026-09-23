@@ -1,6 +1,6 @@
 import express from "express";
 import Doubt from "../models/Doubt.js";
-import User from "../models/User.js";
+import Notification from "../models/Notification.js";
 import { auth } from "../middleware/auth.js";
 
 const router = express.Router();
@@ -10,10 +10,7 @@ router.get("/", auth, async (req, res) => {
     const { subject, search } = req.query;
     const filter = {};
     if (subject) filter.subject = new RegExp(subject, "i");
-    if (search) filter.$or = [
-      { title: new RegExp(search, "i") },
-      { description: new RegExp(search, "i") }
-    ];
+    if (search) filter.$or = [{ title: new RegExp(search, "i") }, { description: new RegExp(search, "i") }];
     const doubts = await Doubt.find(filter).populate("author", "name college skills subjects").sort({ createdAt: -1 });
     res.json({ doubts });
   } catch (e) { res.status(500).json({ message: e.message }); }
@@ -46,6 +43,17 @@ router.post("/:id/answers", auth, async (req, res) => {
     if (!doubt) return res.status(404).json({ message: "Doubt not found" });
     doubt.answers.push({ user: req.user.id, content: req.body.content.trim() });
     await doubt.save();
+
+    if (String(doubt.author) !== String(req.user.id)) {
+      await Notification.create({
+        recipient: doubt.author,
+        type: "answer",
+        title: "New peer answer",
+        message: "Someone answered your academic doubt.",
+        link: `/doubts/${doubt._id}`
+      });
+    }
+
     await doubt.populate("answers.user", "name skills subjects reputation");
     res.status(201).json({ doubt });
   } catch (e) { res.status(500).json({ message: e.message }); }
