@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Routes, Route, Link, Navigate, useNavigate, useParams } from "react-router-dom";
-import { BookOpen, CalendarDays, GraduationCap, LogIn, LogOut, MessageCircle, PlusCircle, Search, UserRound, Users, CheckCircle2 } from "lucide-react";
+import { BookOpen, Bell, CalendarDays, GraduationCap, LogIn, LogOut, MessageCircle, PlusCircle, Search, Users, CheckCircle2 } from "lucide-react";
 import { api } from "./api";
 
 const emptyUser = { name:"", email:"", password:"", college:"", course:"MCA", semester:"" };
@@ -12,7 +12,7 @@ function Layout({ user, setUser }) {
     <header className="topbar">
       <Link className="brand" to="/"><span className="brand-mark"><GraduationCap size={21}/></span>EduBridge</Link>
       {user && <nav>
-        <Link to="/">Dashboard</Link><Link to="/doubts">Doubts</Link><Link to="/tutors">Tutors</Link><Link to="/bookings">Sessions</Link><Link to="/profile">Profile</Link>
+        <Link to="/">Dashboard</Link><Link to="/doubts">Doubts</Link><Link to="/tutors">Tutors</Link><Link to="/bookings">Sessions</Link><Link to="/notifications">Notifications</Link><Link to="/profile">Profile</Link>
         <button className="ghost" onClick={logout}><LogOut size={16}/>Logout</button>
       </nav>}
     </header>
@@ -23,7 +23,7 @@ function Layout({ user, setUser }) {
       <Route path="/doubts" element={user ? <Doubts/> : <Navigate to="/login"/>}/>
       <Route path="/doubts/:id" element={user ? <DoubtDetails/> : <Navigate to="/login"/>}/>
       <Route path="/tutors" element={user ? <Tutors/> : <Navigate to="/login"/>}/>
-      <Route path="/bookings" element={user ? <Bookings user={user}/> : <Navigate to="/login"/>}/>
+      <Route path="/bookings" element={user ? <Bookings user={user}/> : <Navigate to="/login"/>}/><Route path="/notifications" element={user ? <Notifications/> : <Navigate to="/login"/>}/>
       <Route path="/profile" element={user ? <Profile user={user} setUser={setUser}/> : <Navigate to="/login"/>}/>
     </Routes></main>
   </div>
@@ -118,6 +118,18 @@ function Bookings({user}){
   const act=async(id,type)=>{try{await api.put(`/bookings/${id}/${type}`);load()}catch(e){setError(e.response?.data?.message||"Action failed")}};
   return <><div className="page-head"><div><span className="eyebrow">TUTORING SESSIONS</span><h1>My Sessions</h1><p>Manage your incoming requests and scheduled peer sessions.</p></div></div>{error&&<div className="alert">{error}</div>}
     <div className="booking-list">{items.map(b=><div className="booking" key={b._id}><div><span className={`status ${b.status}`}>{b.status}</span><h3>{b.subject}</h3><p>{String(b.learner?._id)===String(user.id)?"Tutor: ":"Learner: "}<b>{String(b.learner?._id)===String(user.id)?b.tutor?.name:b.learner?.name}</b></p><small>{b.date} • {b.time} • {b.mode} • {b.location||"Online"}</small></div><div className="booking-actions">{String(b.tutor?._id)===String(user.id)&&b.status==="pending"&&<><button className="secondary" onClick={()=>act(b._id,"reject")}>Reject</button><button className="primary" onClick={()=>act(b._id,"accept")}>Accept</button></>}{["accepted"].includes(b.status)&&<button className="primary" onClick={()=>act(b._id,"complete")}><CheckCircle2 size={16}/>Complete</button>}</div></div>)}{!items.length&&<div className="empty">No tutoring sessions yet.</div>}</div>
+  </>
+}
+
+function Notifications(){
+  const [items,setItems]=useState([]); const [unread,setUnread]=useState(0); const [error,setError]=useState("");
+  const load=()=>api.get("/notifications").then(r=>{setItems(r.data.notifications);setUnread(r.data.unread)}).catch(e=>setError(e.response?.data?.message||"Unable to load notifications"));
+  useEffect(()=>{load()},[]);
+  const markRead=async(id)=>{try{await api.put(`/notifications/${id}/read`);load()}catch(e){}};
+  const markAll=async()=>{try{await api.put("/notifications/read-all");load()}catch(e){}};
+  return <><div className="page-head"><div><span className="eyebrow">ACTIVITY</span><h1>Notifications {unread>0&&<span className="notification-count">{unread}</span>}</h1><p>Stay updated about answers and tutoring sessions.</p></div><button className="secondary" onClick={markAll}><Bell size={16}/>Mark all as read</button></div>
+    {error&&<div className="alert">{error}</div>}
+    <div className="notification-list">{items.map(n=><div className={`notification ${n.read?"read":""}`} key={n._id} onClick={()=>!n.read&&markRead(n._id)}><span className="notification-icon"><Bell size={17}/></span><div><b>{n.title}</b><p>{n.message}</p><small>{new Date(n.createdAt).toLocaleString()}</small></div>{!n.read&&<span className="unread-dot"/>}</div>)}{!items.length&&<div className="empty">You're all caught up.</div>}</div>
   </>
 }
 
