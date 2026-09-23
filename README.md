@@ -1,170 +1,221 @@
 # EduBridge
 
-### A Peer-to-Peer Academic Doubt Solving and Student Tutoring Platform
+## Peer-to-Peer Academic Doubt Solving & Student Tutoring Platform
 
-EduBridge is a **college-exclusive peer-learning platform** designed to connect students who need academic help with knowledgeable students from the same college. It supports doubt solving, peer tutor discovery, and structured online or offline tutoring sessions within the campus.
+EduBridge is a college-focused peer-learning web application where students can ask academic doubts, answer classmates' questions, discover knowledgeable peers and arrange structured tutoring sessions.
 
 > **Core idea:** Every student can be both a learner and a peer tutor.
 
----
+## Second Review MVP
 
-## Project Overview
+The repository now contains a full-stack MVP for the core learner-to-tutor journey:
 
-Students often face unresolved doubts while preparing for university examinations. Although many students in the same college may already understand those topics, there is no organized way to discover and connect with them.
+**Register/Login → Profile → Ask Doubt → Peer Answer → Find Tutor → Tutoring Request → Accept/Reject → Scheduled Session → Complete**
 
-EduBridge provides a centralized academic-support environment where students can:
+### Implemented
 
-- Post academic doubts by subject and topic
-- Receive answers from fellow students
-- Search previously solved doubts
-- Discover peer tutors based on expertise and availability
-- Request online or offline tutoring sessions
-- Schedule tutoring at a suitable campus location
-- Share academic resources
-- Provide ratings and feedback
+- JWT authentication with bcrypt password hashing
+- Student profile with subjects, skills and availability
+- Academic doubt creation, search and detail view
+- Peer answers
+- Peer tutor discovery by name, subject and skill
+- Online/offline tutoring requests
+- Date, time and campus-location scheduling
+- Tutor accept/reject workflow
+- Session completion and basic reputation points
+- Responsive React student dashboard
+- MongoDB/Mongoose persistence
+- Protected Express REST APIs
 
----
-
-## Problem Statement
-
-Existing methods such as messaging groups, personal contacts, and informal discussions do not provide structured doubt management, tutor discovery, availability information, session scheduling, or a reliable reputation system.
-
-EduBridge addresses this gap by creating a dedicated platform for organized peer-to-peer academic support within the college.
-
----
-
-## User Roles
-
-### Learner
-- Create and post doubts
-- Search answers and resources
-- Find suitable peer tutors
-- Send tutoring requests
-- Schedule sessions
-- Submit feedback
-
-### Peer Tutor
-- Create a tutor profile
-- Select subjects and topics of expertise
-- Set availability
-- Answer doubts
-- Accept or reject tutoring requests
-- Conduct online or offline sessions
-- Build reputation through feedback
-
-### Administrator
-- Manage users and subjects
-- Monitor doubts, reports, and resources
-- Manage platform content
-- Maintain a safe and reliable learning environment
-
-A verified student can act as both a **Learner** and a **Peer Tutor**.
-
----
-
-## Main Modules
-
-1. **Authentication & Profile** – Registration, college verification, login, and student profiles.
-2. **Doubt Management** – Create, view, search, update, and resolve academic doubts.
-3. **Peer Answer Management** – Answers, replies, upvotes, and accepted answers.
-4. **Peer Tutor Management** – Tutor expertise, availability, profiles, and discovery.
-5. **Offline Tutoring & Booking** – Tutoring requests, acceptance, scheduling, location, and completion.
-6. **Chat & Notifications** – Communication and session-related alerts.
-7. **Academic Resources** – Notes, PDFs, and previous-year study materials.
-8. **Ratings, Reputation & Administration** – Feedback, reputation points, badges, reports, and administration.
-
----
-
-## System Workflow
-
-```text
-Register
-   ↓
-College Verification
-   ↓
-Create Profile
-   ↓
-Ask Doubt / Search Doubts
-   ↓
-Discover Peer Tutor
-   ↓
-Send Tutoring Request
-   ↓
-Tutor Accepts or Rejects
-   ↓
-Schedule Date, Time & Campus Location
-   ↓
-Online / Offline Tutoring Session
-   ↓
-Rating, Feedback & Reputation
-```
-
-### Example Use Case
-
-A student has a doubt about DBMS normalization. The student posts the doubt or searches for a DBMS peer tutor. After finding a suitable tutor, the student sends a request. Once accepted, both students schedule a session in an approved campus location such as the library. After the session, the learner can submit feedback.
-
----
-
-## Planned Technology Stack
+### Technology Stack
 
 | Layer | Technology |
 |---|---|
-| Frontend | React.js, HTML5, CSS3, JavaScript, Tailwind CSS |
-| Backend | Node.js, Express.js, REST APIs |
-| Database | MongoDB |
-| Authentication | JWT |
-| Real-time Communication | Socket.IO |
-| Version Control | Git and GitHub |
-| Deployment | Vercel / Render |
+| Frontend | React 18, Vite, React Router, Axios, Lucide React |
+| Backend | Node.js, Express.js |
+| Database | MongoDB + Mongoose |
+| Authentication | JWT + bcryptjs |
+| Styling | Responsive CSS |
+| Version Control | Git + GitHub |
 
-> The stack above represents the planned implementation direction. Update this section if the implemented technologies change.
+## Project Structure
 
----
+```text
+EduBridge/
+├── frontend/
+│   ├── src/
+│   │   ├── App.jsx
+│   │   ├── api.js
+│   │   ├── main.jsx
+│   │   └── styles.css
+│   ├── index.html
+│   └── package.json
+├── backend/
+│   ├── middleware/
+│   │   └── auth.js
+│   ├── models/
+│   │   ├── User.js
+│   │   ├── Doubt.js
+│   │   └── Booking.js
+│   ├── routes/
+│   │   ├── auth.js
+│   │   ├── doubts.js
+│   │   ├── tutors.js
+│   │   └── bookings.js
+│   ├── .env.example
+│   ├── package.json
+│   └── server.js
+├── .gitignore
+└── README.md
+```
 
-## Development Methodology
+## Local Setup
 
-The project follows an Agile development approach using the Scrum framework:
+### 1. Clone
 
-- Requirement identification and product backlog
-- UI and database design
-- Incremental development through sprints
-- Regular testing and validation
-- Version control using Git
-- Periodic review and demonstration
+```bash
+git clone https://github.com/vincentcibin-a11y/EduBridge.git
+cd EduBridge
+```
 
----
+### 2. Start MongoDB
 
-## Expected Outcomes
+Use a local MongoDB service or MongoDB Atlas.
 
-- Faster resolution of academic doubts
-- Improved peer-to-peer learning
-- Better discovery of knowledgeable students
-- Organized offline academic support
-- Reusable repository of solved doubts
-- Recognition for helpful peer tutors
-- Stronger academic collaboration within the college
+### 3. Start the backend
 
----
+```bash
+cd backend
+npm install
+```
 
-## Future Scope
+Create a `.env` file from `.env.example`:
 
-- AI-assisted doubt hints
-- OCR for handwritten questions
-- Video tutoring
-- Faculty-recommended tutors
-- Mobile application
-- Advanced tutor matching
-- College LMS integration
-- Expansion to multiple colleges
+```env
+PORT=5000
+MONGODB_URI=mongodb://127.0.0.1:27017/edubridge
+JWT_SECRET=replace-with-a-long-random-secret
+CLIENT_URL=http://localhost:5173
+```
 
----
+Then:
 
-## Project Status
+```bash
+npm run dev
+```
 
-This repository is being developed as part of an MCA mini project. Features and modules will be implemented incrementally and documented as development progresses.
+The API runs on `http://localhost:5000`.
 
-## Author
+### 4. Start the frontend
 
-**Cibin Vincent**  
-MCA & FIT25MCA-2028  
-GitHub: [vincentcibin-a11y](https://github.com/vincentcibin-a11y)
+Open another terminal:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open the Vite URL shown in the terminal, normally `http://localhost:5173`.
+
+### Windows note
+
+Instead of `cp .env.example .env`, you can use:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+## Second Review Demo
+
+Use two student accounts.
+
+### Student A — Learner
+
+1. Register and log in.
+2. Update the profile with subjects and skills.
+3. Create a DBMS/Java/Python doubt.
+4. Open the doubt and view/post peer answers.
+5. Open **Find a Tutor**.
+6. Select Student B.
+7. Send an offline or online tutoring request with date, time and location.
+
+### Student B — Peer Tutor
+
+1. Register and log in.
+2. Add subjects, skills and availability.
+3. Open **My Sessions**.
+4. Accept or reject the incoming request.
+
+### Student A
+
+1. Open **My Sessions**.
+2. Confirm the scheduled session.
+3. Complete the session.
+
+This demonstrates the central project workflow:
+
+```text
+Student
+  ↓
+Authentication
+  ↓
+Ask Doubt
+  ↓
+Peer Answer
+  ↓
+Find Tutor
+  ↓
+Tutoring Request
+  ↓
+Tutor Accepts
+  ↓
+Schedule Session
+  ↓
+Complete Session
+```
+
+## API Overview
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| POST | `/api/auth/register` | Register |
+| POST | `/api/auth/login` | Login |
+| GET | `/api/auth/profile` | Current profile |
+| PUT | `/api/auth/profile` | Update profile |
+| GET | `/api/doubts` | List/search doubts |
+| POST | `/api/doubts` | Create doubt |
+| GET | `/api/doubts/:id` | View doubt |
+| POST | `/api/doubts/:id/answers` | Add peer answer |
+| PUT | `/api/doubts/:id/status` | Resolve/open doubt |
+| GET | `/api/tutors` | Discover peer tutors |
+| GET | `/api/tutors/:id` | View tutor |
+| GET | `/api/bookings` | List sessions |
+| POST | `/api/bookings` | Send tutoring request |
+| PUT | `/api/bookings/:id/accept` | Accept request |
+| PUT | `/api/bookings/:id/reject` | Reject request |
+| PUT | `/api/bookings/:id/complete` | Complete session |
+
+## Development Roadmap
+
+The Second Review MVP intentionally prioritizes the core workflow. Next iterations can add:
+
+- Socket.IO real-time chat
+- Notifications
+- Academic resource sharing
+- Ratings and detailed reputation
+- Admin moderation dashboard
+- Automated tests
+- Production deployment
+- Enhanced college verification
+
+## Academic Project Context
+
+**Student:** Cibin Vincent  
+**Program:** MCA  
+**ID:** FIT25MCA-2028  
+**Guide:** Ms. Senu Abi
+
+## License
+
+This project is developed as an academic MCA mini project.
