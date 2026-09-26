@@ -12,6 +12,8 @@ const userSchema = new mongoose.Schema({
   subjects: [{ type: String, trim: true }],
   availability: { type: String, default: "Flexible" },
   reputation: { type: Number, default: 0 },
+  ratingAverage: { type: Number, default: 0 },
+  ratingCount: { type: Number, default: 0 },
   role: { type: String, enum: ["student", "admin"], default: "student" }
 }, { timestamps: true });
 
