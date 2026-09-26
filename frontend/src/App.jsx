@@ -99,7 +99,7 @@ function Tutors(){
   return <><div className="page-head"><div><span className="eyebrow">PEER TUTORS</span><h1>Find a Tutor</h1><p>Discover students who can help with your subjects and skills.</p></div></div>
     <div className="searchbar"><Search size={18}/><input placeholder="Search by name, subject or skill..." value={search} onChange={e=>setSearch(e.target.value)} onKeyDown={e=>e.key==="Enter"&&load()}/><button className="secondary" onClick={load}>Search</button></div>
     {error&&<div className="alert">{error}</div>}
-    <div className="tutor-grid">{tutors.map(t=><div className="tutor-card" key={t._id}><div className="avatar big">{t.name?.[0]}</div><h3>{t.name}</h3><small>{t.course} • {t.college}</small><p>{t.bio||"Peer tutor ready to help fellow students."}</p><div className="chips">{[...(t.subjects||[]),...(t.skills||[])].slice(0,5).map(x=><span className="tag" key={x}>{x}</span>)}</div><div className="tutor-foot"><span>★ {t.reputation||0} pts</span><button className="primary small" onClick={()=>setSelected(t)}>Request Session</button></div></div>)}</div>
+    <div className="tutor-grid">{tutors.map(t=><div className="tutor-card" key={t._id}><div className="avatar big">{t.name?.[0]}</div><h3>{t.name}</h3><small>{t.course} • {t.college}</small><p>{t.bio||"Peer tutor ready to help fellow students."}</p><div className="chips">{[...(t.subjects||[]),...(t.skills||[])].slice(0,5).map(x=><span className="tag" key={x}>{x}</span>)}</div><div className="tutor-foot"><span>★ {Number(t.ratingAverage||0).toFixed(1)} ({t.ratingCount||0}) · {t.reputation||0} pts</span><button className="primary small" onClick={()=>setSelected(t)}>Request Session</button></div></div>)}</div>
     {!tutors.length&&<div className="empty">No tutors found yet. Add subjects and skills in your profile.</div>}
     {selected&&<BookingModal tutor={selected} close={()=>setSelected(null)}/>}
   </>
@@ -117,8 +117,33 @@ function Bookings({user}){
   useEffect(()=>{load()},[]);
   const act=async(id,type)=>{try{await api.put(`/bookings/${id}/${type}`);load()}catch(e){setError(e.response?.data?.message||"Action failed")}};
   return <><div className="page-head"><div><span className="eyebrow">TUTORING SESSIONS</span><h1>My Sessions</h1><p>Manage your incoming requests and scheduled peer sessions.</p></div></div>{error&&<div className="alert">{error}</div>}
-    <div className="booking-list">{items.map(b=><div className="booking" key={b._id}><div><span className={`status ${b.status}`}>{b.status}</span><h3>{b.subject}</h3><p>{String(b.learner?._id)===String(user.id)?"Tutor: ":"Learner: "}<b>{String(b.learner?._id)===String(user.id)?b.tutor?.name:b.learner?.name}</b></p><small>{b.date} • {b.time} • {b.mode} • {b.location||"Online"}</small></div><div className="booking-actions">{String(b.tutor?._id)===String(user.id)&&b.status==="pending"&&<><button className="secondary" onClick={()=>act(b._id,"reject")}>Reject</button><button className="primary" onClick={()=>act(b._id,"accept")}>Accept</button></>}{["accepted"].includes(b.status)&&<button className="primary" onClick={()=>act(b._id,"complete")}><CheckCircle2 size={16}/>Complete</button>}</div></div>)}{!items.length&&<div className="empty">No tutoring sessions yet.</div>}</div>
+    <div className="booking-list">{items.map(b=><div className="booking" key={b._id}><div><span className={`status ${b.status}`}>{b.status}</span><h3>{b.subject}</h3><p>{String(b.learner?._id)===String(user.id)?"Tutor: ":"Learner: "}<b>{String(b.learner?._id)===String(user.id)?b.tutor?.name:b.learner?.name}</b></p><small>{b.date} • {b.time} • {b.mode} • {b.location||"Online"}</small></div><div className="booking-actions">{String(b.tutor?._id)===String(user.id)&&b.status==="pending"&&<><button className="secondary" onClick={()=>act(b._id,"reject")}>Reject</button><button className="primary" onClick={()=>act(b._id,"accept")}>Accept</button></>}{["accepted"].includes(b.status)&&<button className="primary" onClick={()=>act(b._id,"complete")}><CheckCircle2 size={16}/>Complete</button>}{b.status==="completed"&&String(b.learner?._id)===String(user.id)&&!b.reviewedByLearner&&<ReviewForm booking={b} onDone={load} />}{b.status==="completed"&&b.reviewedByLearner&&String(b.learner?._id)===String(user.id)&&<span className="success-text">Review submitted</span>}</div></div>)}{!items.length&&<div className="empty">No tutoring sessions yet.</div>}</div>
   </>
+}
+
+function ReviewForm({booking,onDone}){
+  const [rating,setRating]=useState("5");
+  const [feedback,setFeedback]=useState("");
+  const [message,setMessage]=useState("");
+  const [saving,setSaving]=useState(false);
+  const submit=async e=>{
+    e.preventDefault();setSaving(true);setMessage("");
+    try{
+      await api.post(`/reviews/booking/${booking._id}`,{rating:Number(rating),feedback});
+      setMessage("Thanks for your feedback!");
+      onDone();
+    }catch(e){setMessage(e.response?.data?.message||"Unable to submit review");}
+    finally{setSaving(false);}
+  };
+  return <form className="review-form" onSubmit={submit}>
+    <label>Rate this session</label>
+    <select value={rating} onChange={e=>setRating(e.target.value)}>
+      <option value="5">5 - Excellent</option><option value="4">4 - Very good</option><option value="3">3 - Good</option><option value="2">2 - Fair</option><option value="1">1 - Poor</option>
+    </select>
+    <input value={feedback} onChange={e=>setFeedback(e.target.value)} maxLength={1000} placeholder="Optional feedback for your tutor"/>
+    <button className="secondary" disabled={saving}>{saving?"Submitting...":"Submit review"}</button>
+    {message&&<small>{message}</small>}
+  </form>
 }
 
 function Notifications(){
