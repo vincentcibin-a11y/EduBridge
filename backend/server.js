@@ -7,6 +7,7 @@ import doubtRoutes from "./routes/doubts.js";
 import tutorRoutes from "./routes/tutors.js";
 import bookingRoutes from "./routes/bookings.js";
 import notificationRoutes from "./routes/notifications.js";
+import reviewRoutes from "./routes/reviews.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -21,6 +22,7 @@ app.use("/api/doubts", doubtRoutes);
 app.use("/api/tutors", tutorRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/reviews", reviewRoutes);
 
 app.use((req, res) => res.status(404).json({ message: "Endpoint not found" }));
 app.use((err, req, res, next) => {
