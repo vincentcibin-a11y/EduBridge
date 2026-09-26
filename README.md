@@ -38,13 +38,17 @@ The repository now contains a full-stack MVP for the core learner-to-tutor journ
 | Database | MongoDB + Mongoose |
 | Authentication | JWT + bcryptjs |
 | Styling | Responsive CSS |
+| Development environment | Docker + Docker Compose |
 | Version Control | Git + GitHub |
 
 ## Project Structure
 
 ```text
 EduBridge/
+├── docker-compose.yml
 ├── frontend/
+│   ├── Dockerfile
+│   ├── .dockerignore
 │   ├── src/
 │   │   ├── App.jsx
 │   │   ├── api.js
@@ -53,21 +57,12 @@ EduBridge/
 │   ├── index.html
 │   └── package.json
 ├── backend/
+│   ├── Dockerfile
+│   ├── .dockerignore
 │   ├── middleware/
-│   │   └── auth.js
 │   ├── models/
-│   │   ├── User.js
-│   │   ├── Doubt.js
-│   │   ├── Booking.js
-│   │   ├── Notification.js
-│   │   └── Review.js
 │   ├── routes/
-│   │   ├── auth.js
-│   │   ├── doubts.js
-│   │   ├── tutors.js
-│   │   ├── bookings.js
-│   │   ├── notifications.js
-│   │   └── reviews.js
+│   ├── test/
 │   ├── .env.example
 │   ├── package.json
 │   └── server.js
@@ -78,7 +73,102 @@ EduBridge/
 └── README.md
 ```
 
-## Local Setup
+## Quick Start with Docker Compose (Recommended)
+
+Docker Compose starts the frontend, backend API and MongoDB together. You do not need to install Node.js or MongoDB directly on your computer, but you do need Docker Desktop (Windows/macOS) or Docker Engine with the Compose plugin (Linux).
+
+### 1. Install and start Docker
+
+Install Docker Desktop from [docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop/) and make sure it is running.
+
+### 2. Clone the repository
+
+```bash
+git clone https://github.com/vincentcibin-a11y/EduBridge.git
+cd EduBridge
+```
+
+### 3. (Recommended) Set a local JWT secret
+
+Compose has a development-only fallback secret so the project can start immediately. For your own local environment, create a file named `.env` in the repository root and set a unique secret:
+
+```env
+JWT_SECRET=replace-with-a-long-random-local-development-secret
+```
+
+The root `.env` file is ignored by Git. Do not use the development fallback or commit secrets in a production deployment.
+
+### 4. Build and start all services
+
+Run from the repository root:
+
+```bash
+docker compose up --build
+```
+
+The first run downloads the images and installs Node dependencies, so it may take a few minutes. Keep this terminal open to see service logs.
+
+Open these URLs:
+
+- **EduBridge frontend:** http://localhost:5173
+- **Backend health check:** http://localhost:5000/api/health
+- **MongoDB:** `mongodb://localhost:27017/edubridge`
+
+The backend waits for MongoDB's health check before starting. The MongoDB database is stored in a named Docker volume and persists when containers are stopped.
+
+### 5. Stop or restart the services
+
+Stop the running stack with `Ctrl+C`, or from another terminal run:
+
+```bash
+docker compose down
+```
+
+Start it again later with:
+
+```bash
+docker compose up
+```
+
+To rebuild after changing a Dockerfile or dependencies:
+
+```bash
+docker compose up --build
+```
+
+To follow logs for one service:
+
+```bash
+docker compose logs -f backend
+docker compose logs -f frontend
+docker compose logs -f mongo
+```
+
+To remove the containers **and permanently delete the local MongoDB data volume**, run:
+
+```bash
+docker compose down -v
+```
+
+Only use `-v` if you intentionally want to erase the development database.
+
+### Development workflow with Docker
+
+The source folders are mounted into the frontend and backend containers. Code changes should be picked up by Vite and Nodemon, allowing hot reload without rebuilding the images. Dependencies are kept in named volumes so the host's `node_modules` folder does not overwrite the container's Linux dependencies.
+
+If you change dependencies in either `package.json` or its lockfile, rebuild the services with `docker compose up --build`.
+
+### Troubleshooting
+
+- **Docker daemon error:** Start Docker Desktop and wait until its engine is running.
+- **Port already in use:** Stop the other service using port 5173, 5000 or 27017, or change the host-side port mapping in `docker-compose.yml`.
+- **Frontend cannot reach the API:** Open the frontend at `http://localhost:5173` and check that the backend health check at `http://localhost:5000/api/health` returns JSON with `"status": "ok"`.
+- **Dependency changes are not reflected:** Run `docker compose up --build` to rebuild the affected image.
+- **Reset local data:** `docker compose down -v` deletes the MongoDB volume as well as the containers. This cannot be undone.
+
+> **Scope:** These Dockerfiles and Compose settings are for local development. Before production deployment, use a strong secret managed outside source control, production-appropriate images/configuration, and a deployment-specific setup.
+
+## Local Setup (without Docker)
 
 ### 1. Clone
 
@@ -188,6 +278,7 @@ Complete Session
 
 | Method | Endpoint | Purpose |
 |---|---|---|
+| GET | `/api/health` | API health check |
 | POST | `/api/auth/register` | Register |
 | POST | `/api/auth/login` | Login |
 | GET | `/api/auth/profile` | Current profile |
@@ -218,7 +309,7 @@ The Second Review MVP intentionally prioritizes the core workflow. Next iteratio
 - Academic resource sharing
 - More detailed reputation and review moderation
 - Admin moderation dashboard
-- Automated tests
+- Additional automated tests
 - Production deployment
 - Enhanced college verification
 
