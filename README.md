@@ -26,6 +26,7 @@ The repository now contains a full-stack MVP for the core learner-to-tutor journ
 - Responsive React student dashboard
 - MongoDB/Mongoose persistence
 - Protected Express REST APIs
+- In-app notifications for doubt answers and tutoring-request updates
 
 ### Technology Stack
 
@@ -195,13 +196,15 @@ Complete Session
 | PUT | `/api/bookings/:id/accept` | Accept request |
 | PUT | `/api/bookings/:id/reject` | Reject request |
 | PUT | `/api/bookings/:id/complete` | Complete session |
+| GET | `/api/notifications` | List notifications |
+| PUT | `/api/notifications/:id/read` | Mark one notification as read |
+| PUT | `/api/notifications/read-all` | Mark all notifications as read |
 
 ## Development Roadmap
 
 The Second Review MVP intentionally prioritizes the core workflow. Next iterations can add:
 
 - Socket.IO real-time chat
-- Notifications
 - Academic resource sharing
 - Ratings and detailed reputation
 - Admin moderation dashboard
