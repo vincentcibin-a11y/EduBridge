@@ -9,10 +9,16 @@ const router = express.Router();
 
 router.post("/booking/:bookingId", auth, async (req, res) => {
   try {
+    if (!mongoose.isValidObjectId(req.params.bookingId)) {
+      return res.status(400).json({ message: "Invalid booking ID" });
+    }
     const { rating, feedback = "" } = req.body;
     const score = Number(rating);
     if (!Number.isInteger(score) || score < 1 || score > 5) {
       return res.status(400).json({ message: "Rating must be an integer from 1 to 5" });
+    }
+    if (typeof feedback !== "string") {
+      return res.status(400).json({ message: "Feedback must be text" });
     }
     const booking = await Booking.findById(req.params.bookingId);
     if (!booking) return res.status(404).json({ message: "Booking not found" });
@@ -31,7 +37,7 @@ router.post("/booking/:bookingId", auth, async (req, res) => {
       learner: booking.learner,
       tutor: booking.tutor,
       rating: score,
-      feedback: String(feedback).trim().slice(0, 1000)
+      feedback: feedback.trim().slice(0, 1000)
     });
     booking.reviewedByLearner = true;
     await booking.save();
@@ -46,14 +52,18 @@ router.post("/booking/:bookingId", auth, async (req, res) => {
     });
 
     await review.populate("learner", "name");
-    res.status(201).json({ review, ratingAverage: summary.average, ratingCount: summary.count });
+    res.status(201).json({
+      review,
+      ratingAverage: Math.round(summary.average * 10) / 10,
+      ratingCount: summary.count
+    });
   } catch (e) {
     if (e.code === 11000) return res.status(409).json({ message: "This session has already been reviewed" });
-    res.status(500).json({ message: e.message });
+    res.status(500).json({ message: "Unable to submit the review right now" });
   }
 });
 
-router.get("/tutor/:tutorId", async (req, res) => {
+router.get("/tutor/:tutorId", auth, async (req, res) => {
   try {
     if (!mongoose.isValidObjectId(req.params.tutorId)) {
       return res.status(400).json({ message: "Invalid tutor ID" });
@@ -63,8 +73,8 @@ router.get("/tutor/:tutorId", async (req, res) => {
       .sort({ createdAt: -1 })
       .limit(50);
     res.json({ reviews });
-  } catch (e) {
-    res.status(500).json({ message: e.message });
+  } catch {
+    res.status(500).json({ message: "Unable to load tutor reviews right now" });
   }
 });
 
