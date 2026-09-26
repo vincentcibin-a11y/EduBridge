@@ -9,7 +9,8 @@ const bookingSchema = new mongoose.Schema({
   time: { type: String, required: true },
   location: { type: String, default: "" },
   notes: { type: String, default: "" },
-  status: { type: String, enum: ["pending", "accepted", "rejected", "completed", "cancelled"], default: "pending" }
+  status: { type: String, enum: ["pending", "accepted", "rejected", "completed", "cancelled"], default: "pending" },
+  reviewedByLearner: { type: Boolean, default: false }
 }, { timestamps: true });
 
 export default mongoose.model("Booking", bookingSchema);
