@@ -57,15 +57,20 @@ EduBridge/
 │   ├── models/
 │   │   ├── User.js
 │   │   ├── Doubt.js
-│   │   └── Booking.js
+│   │   ├── Booking.js
+│   │   └── Notification.js
 │   ├── routes/
 │   │   ├── auth.js
 │   │   ├── doubts.js
 │   │   ├── tutors.js
-│   │   └── bookings.js
+│   │   ├── bookings.js
+│   │   └── notifications.js
 │   ├── .env.example
 │   ├── package.json
 │   └── server.js
+├── .github/
+│   └── workflows/
+│       └── ci.yml
 ├── .gitignore
 └── README.md
 ```
