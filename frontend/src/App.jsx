@@ -58,11 +58,19 @@ function Auth({ mode, setUser }) {
 
 function Dashboard({user}){
   const [stats,setStats]=useState({doubts:0, tutors:0, bookings:0});
-  useEffect(()=>{Promise.all([api.get("/doubts"),api.get("/tutors"),api.get("/bookings")]).then(([d,t,b])=>setStats({doubts:d.data.doubts.length,tutors:t.data.tutors.length,bookings:b.data.bookings.length})).catch(()=>{});},[]);
+  const [loading,setLoading]=useState(true);
+  useEffect(()=>{Promise.all([api.get("/doubts"),api.get("/tutors"),api.get("/bookings")]).then(([d,t,b])=>setStats({doubts:d.data.doubts.length,tutors:t.data.tutors.length,bookings:b.data.bookings.length})).catch(()=>{}).finally(()=>setLoading(false));},[]);
+  const highlights = [
+    { title: "Ask a doubt", text: "Get a response from peers in your course." },
+    { title: "Find a tutor", text: "Search by subject, skill, and availability." },
+    { title: "Track sessions", text: "Accept, complete, and review every study session." }
+  ];
   return <><div className="hero"><div><span className="eyebrow">COLLEGE PEER LEARNING</span><h1>Learn together. <span>Grow together.</span></h1><p>Ask a doubt, find a knowledgeable peer, and turn academic help into a structured tutoring session.</p><div className="actions"><Link className="primary" to="/doubts"><BookOpen size={17}/>Explore Doubts</Link><Link className="secondary" to="/tutors"><Users size={17}/>Find a Tutor</Link></div></div><div className="hero-art"><GraduationCap size={74}/><div><b>{user.name}</b><small>{user.course} • {user.college}</small></div></div></div>
-    <div className="stats"><Stat icon={<MessageCircle/>} label="Open Doubts" value={stats.doubts}/><Stat icon={<Users/>} label="Peer Tutors" value={stats.tutors}/><Stat icon={<CalendarDays/>} label="My Sessions" value={stats.bookings}/></div>
+    <div className="stats">{loading ? <Stat icon={<MessageCircle/>} label="Loading" value="--"/> : <><Stat icon={<MessageCircle/>} label="Open Doubts" value={stats.doubts}/><Stat icon={<Users/>} label="Peer Tutors" value={stats.tutors}/><Stat icon={<CalendarDays/>} label="My Sessions" value={stats.bookings}/></> }</div>
     <div className="section-head"><h2>How EduBridge works</h2><span>Core learner → tutor journey</span></div>
     <div className="steps">{["Ask a Doubt","Get Peer Answers","Discover a Tutor","Book a Session"].map((x,i)=><div className="step" key={x}><span>{i+1}</span><b>{x}</b><small>{["Post your academic question.","Learn from fellow students.","Search by skills & subjects.","Schedule online or offline."][i]}</small></div>)}</div>
+    <div className="section-head"><h2>Quick wins</h2><span>Keep momentum this week</span></div>
+    <div className="highlights-grid">{highlights.map((item)=><div className="highlight-card" key={item.title}><h3>{item.title}</h3><p>{item.text}</p></div>)}</div>
   </>
 }
 function Stat({icon,label,value}){return <div className="stat"><span className="stat-icon">{icon}</span><div><b>{value}</b><small>{label}</small></div></div>}
@@ -113,11 +121,12 @@ function BookingModal({tutor,close}){
 
 function Bookings({user}){
   const [items,setItems]=useState([]); const [error,setError]=useState("");
-  const load=()=>api.get("/bookings").then(r=>setItems(r.data.bookings)).catch(e=>setError(e.response?.data?.message||"Unable to load sessions"));
+  const [loading,setLoading]=useState(true);
+  const load=()=>api.get("/bookings").then(r=>setItems(r.data.bookings)).catch(e=>setError(e.response?.data?.message||"Unable to load sessions")).finally(()=>setLoading(false));
   useEffect(()=>{load()},[]);
   const act=async(id,type)=>{try{await api.put(`/bookings/${id}/${type}`);load()}catch(e){setError(e.response?.data?.message||"Action failed")}};
   return <><div className="page-head"><div><span className="eyebrow">TUTORING SESSIONS</span><h1>My Sessions</h1><p>Manage your incoming requests and scheduled peer sessions.</p></div></div>{error&&<div className="alert">{error}</div>}
-    <div className="booking-list">{items.map(b=><div className="booking" key={b._id}><div><span className={`status ${b.status}`}>{b.status}</span><h3>{b.subject}</h3><p>{String(b.learner?._id)===String(user.id)?"Tutor: ":"Learner: "}<b>{String(b.learner?._id)===String(user.id)?b.tutor?.name:b.learner?.name}</b></p><small>{b.date} • {b.time} • {b.mode} • {b.location||"Online"}</small></div><div className="booking-actions">{String(b.tutor?._id)===String(user.id)&&b.status==="pending"&&<><button className="secondary" onClick={()=>act(b._id,"reject")}>Reject</button><button className="primary" onClick={()=>act(b._id,"accept")}>Accept</button></>}{["accepted"].includes(b.status)&&<button className="primary" onClick={()=>act(b._id,"complete")}><CheckCircle2 size={16}/>Complete</button>}{b.status==="completed"&&String(b.learner?._id)===String(user.id)&&!b.reviewedByLearner&&<ReviewForm booking={b} onDone={load} />}{b.status==="completed"&&b.reviewedByLearner&&String(b.learner?._id)===String(user.id)&&<span className="success-text">Review submitted</span>}</div></div>)}{!items.length&&<div className="empty">No tutoring sessions yet.</div>}</div>
+    <div className="booking-list">{loading ? <div className="loading">Loading sessions…</div> : items.map(b=><div className="booking" key={b._id}><div><span className={`status ${b.status}`}>{b.status}</span><h3>{b.subject}</h3><p>{String(b.learner?._id)===String(user.id)?"Tutor: ":"Learner: "}<b>{String(b.learner?._id)===String(user.id)?b.tutor?.name:b.learner?.name}</b></p><small>{b.date} • {b.time} • {b.mode} • {b.location||"Online"}</small></div><div className="booking-actions">{String(b.tutor?._id)===String(user.id)&&b.status==="pending"&&<><button className="secondary" onClick={()=>act(b._id,"reject")}>Reject</button><button className="primary" onClick={()=>act(b._id,"accept")}>Accept</button></>}{["accepted"].includes(b.status)&&<button className="primary" onClick={()=>act(b._id,"complete")}><CheckCircle2 size={16}/>Complete</button>}{b.status==="completed"&&String(b.learner?._id)===String(user.id)&&!b.reviewedByLearner&&<ReviewForm booking={b} onDone={load} />}{b.status==="completed"&&b.reviewedByLearner&&String(b.learner?._id)===String(user.id)&&<span className="success-text">Review submitted</span>}</div></div>)} {!items.length&&!loading&&<div className="empty">No tutoring sessions yet.</div>}</div>
   </>
 }
 
@@ -148,13 +157,14 @@ function ReviewForm({booking,onDone}){
 
 function Notifications(){
   const [items,setItems]=useState([]); const [unread,setUnread]=useState(0); const [error,setError]=useState("");
-  const load=()=>api.get("/notifications").then(r=>{setItems(r.data.notifications);setUnread(r.data.unread)}).catch(e=>setError(e.response?.data?.message||"Unable to load notifications"));
+  const [loading,setLoading]=useState(true);
+  const load=()=>api.get("/notifications").then(r=>{setItems(r.data.notifications);setUnread(r.data.unread)}).catch(e=>setError(e.response?.data?.message||"Unable to load notifications")).finally(()=>setLoading(false));
   useEffect(()=>{load()},[]);
   const markRead=async(id)=>{try{await api.put(`/notifications/${id}/read`);load()}catch(e){}};
   const markAll=async()=>{try{await api.put("/notifications/read-all");load()}catch(e){}};
   return <><div className="page-head"><div><span className="eyebrow">ACTIVITY</span><h1>Notifications {unread>0&&<span className="notification-count">{unread}</span>}</h1><p>Stay updated about answers and tutoring sessions.</p></div><button className="secondary" onClick={markAll}><Bell size={16}/>Mark all as read</button></div>
     {error&&<div className="alert">{error}</div>}
-    <div className="notification-list">{items.map(n=><div className={`notification ${n.read?"read":""}`} key={n._id} onClick={()=>!n.read&&markRead(n._id)}><span className="notification-icon"><Bell size={17}/></span><div><b>{n.title}</b><p>{n.message}</p><small>{new Date(n.createdAt).toLocaleString()}</small></div>{!n.read&&<span className="unread-dot"/>}</div>)}{!items.length&&<div className="empty">You're all caught up.</div>}</div>
+    <div className="notification-list">{loading ? <div className="loading">Loading notifications…</div> : items.map(n=><div className={`notification ${n.read?"read":""}`} key={n._id} onClick={()=>!n.read&&markRead(n._id)}><span className="notification-icon"><Bell size={17}/></span><div><b>{n.title}</b><p>{n.message}</p><small>{new Date(n.createdAt).toLocaleString()}</small></div>{!n.read&&<span className="unread-dot"/>}</div>)} {!items.length&&!loading&&<div className="empty">You're all caught up.</div>}</div>
   </>
 }
 
