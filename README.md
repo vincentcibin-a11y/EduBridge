@@ -22,11 +22,12 @@ The repository now contains a full-stack MVP for the core learner-to-tutor journ
 - Online/offline tutoring requests
 - Date, time and campus-location scheduling
 - Tutor accept/reject workflow
-- Session completion and basic reputation points
+- Session completion, basic reputation points, and learner ratings/feedback
 - Responsive React student dashboard
 - MongoDB/Mongoose persistence
 - Protected Express REST APIs
 - In-app notifications for doubt answers and tutoring-request updates
+- Session reviews with 1–5 ratings, optional feedback, and tutor rating averages
 
 ### Technology Stack
 
@@ -58,13 +59,15 @@ EduBridge/
 │   │   ├── User.js
 │   │   ├── Doubt.js
 │   │   ├── Booking.js
-│   │   └── Notification.js
+│   │   ├── Notification.js
+│   │   └── Review.js
 │   ├── routes/
 │   │   ├── auth.js
 │   │   ├── doubts.js
 │   │   ├── tutors.js
 │   │   ├── bookings.js
-│   │   └── notifications.js
+│   │   ├── notifications.js
+│   │   └── reviews.js
 │   ├── .env.example
 │   ├── package.json
 │   └── server.js
@@ -204,6 +207,8 @@ Complete Session
 | GET | `/api/notifications` | List notifications |
 | PUT | `/api/notifications/:id/read` | Mark one notification as read |
 | PUT | `/api/notifications/read-all` | Mark all notifications as read |
+| POST | `/api/reviews/booking/:bookingId` | Review a completed session |
+| GET | `/api/reviews/tutor/:tutorId` | List reviews for a tutor |
 
 ## Development Roadmap
 
@@ -211,7 +216,7 @@ The Second Review MVP intentionally prioritizes the core workflow. Next iteratio
 
 - Socket.IO real-time chat
 - Academic resource sharing
-- Ratings and detailed reputation
+- More detailed reputation and review moderation
 - Admin moderation dashboard
 - Automated tests
 - Production deployment
