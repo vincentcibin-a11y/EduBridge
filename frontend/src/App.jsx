@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route, Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { BookOpen, Bell, CalendarDays, GraduationCap, LogIn, LogOut, MessageCircle, PlusCircle, Search, Users, CheckCircle2 } from "lucide-react";
 import { api } from "./api";
