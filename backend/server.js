@@ -11,7 +11,6 @@ import reviewRoutes from "./routes/reviews.js";
 
 const app = express();
 const PORT = Number(process.env.PORT || 5000);
-const JWT_SECRET = process.env.JWT_SECRET || "edubridge-dev-secret-change-me";
 const DEFAULT_CLIENT_URL = "http://localhost:5173";
 const ALLOWED_ORIGINS = new Set([
   process.env.CLIENT_URL || DEFAULT_CLIENT_URL,
@@ -20,10 +19,13 @@ const ALLOWED_ORIGINS = new Set([
 ]);
 
 if (!process.env.JWT_SECRET) {
+  if (process.env.NODE_ENV === "production") {
+    console.error("JWT_SECRET must be set in production. Refusing to start.");
+    process.exit(1);
+  }
+  process.env.JWT_SECRET = "edubridge-dev-secret-change-me";
   console.warn("JWT_SECRET is missing; using a local development fallback. Set it in backend/.env for production use.");
 }
-
-process.env.JWT_SECRET = JWT_SECRET;
 
 app.use(cors({
   origin: (origin, callback) => {
@@ -48,6 +50,9 @@ app.use("/api/reviews", reviewRoutes);
 
 app.use((req, res) => res.status(404).json({ message: "Endpoint not found" }));
 app.use((err, req, res, next) => {
+  if (err.message === "CORS policy: origin not allowed") {
+    return res.status(403).json({ message: "Origin not allowed by CORS policy" });
+  }
   console.error(err);
   res.status(500).json({ message: "Internal server error" });
 });
