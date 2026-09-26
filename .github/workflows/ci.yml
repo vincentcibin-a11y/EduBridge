@@ -26,8 +26,7 @@ jobs:
         working-directory: backend
         run: |
           npm install
-          node --check server.js
-          node --check middleware/auth.js
+          find . -type f -name '*.js' -not -path './node_modules/*' -print0 | xargs -0 -n1 node --check
 
       - name: Install and build frontend
         working-directory: frontend
