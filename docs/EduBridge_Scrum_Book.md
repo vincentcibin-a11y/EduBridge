@@ -197,6 +197,8 @@ The following entries are taken from GitHub commit history. GitHub timestamps ar
 | 2026-09-27 | [534642c](https://github.com/vincentcibin-a11y/EduBridge/commit/534642c15a753c39da729f2aa7008e51418b4bae) | Add MCA mini project documentation |
 | 2026-09-27 | [8a41215](https://github.com/vincentcibin-a11y/EduBridge/commit/8a41215375251d3e2eefdb5aade84ff9ef1ad448) | Link academic documentation from README |
 | 2026-09-27 | [6dfabc3](https://github.com/vincentcibin-a11y/EduBridge/commit/6dfabc38726c898125c6c1585a1926c02421b335) | Expand integration coverage for profiles, tutor search, notifications, and rejection |
+| 2026-09-27 | [60ee7d9](https://github.com/vincentcibin-a11y/EduBridge/commit/60ee7d9202ff05548e88b4c4cf074fe0fa140137) | Add ERD and requirements traceability to project documentation |
+| 2026-09-27 | [98a3f8d](https://github.com/vincentcibin-a11y/EduBridge/commit/98a3f8d103b52869ad98217d0d5168e98868769d) | Build Docker images as part of CI validation |
 
 For the final submission, add the relevant commit SHA and date for each major feature increment, and add release tags only when they are actually created. Do not backdate sprint records.
 
