@@ -106,6 +106,10 @@ A backlog item is considered done when its acceptance criteria are met, relevant
 | Review form | Submit session feedback | 1–5 rating, optional comment |
 | Notifications | View updates | Read/unread state, mark read actions |
 
+## 2.5 Logical ERD reference
+
+Use the ERD in `docs/EduBridge_Project_Documentation.md` as the current logical design reference. Before submission, compare it with the final Mongoose schemas and attach a rendered diagram or screenshot if the department's format requires a separate figure.
+
 ## 2.5 Design decisions
 - Keep frontend and backend separated for maintainability.
 - Use protected API routes for user-specific operations.
@@ -175,6 +179,22 @@ Use Git commits to record incremental changes. The table below is a project mile
 | v0.4 | Tutor discovery and booking workflow | Commit SHA and demo notes |
 | v0.5 | Notifications, reviews, validation hardening | Commit SHA, CI run, test evidence |
 | v1.0 | Reviewed and documented submission build | Final tag/commit and guide approval |
+
+## 4.2 Verified recent repository changes
+
+The following entries are taken from GitHub commit history. GitHub timestamps are UTC. These are change-history records, not proof of sprint reviews, guide approval, or formal release tags.
+
+| Date (UTC) | Commit | Change |
+|---|---|---|
+| 2026-09-26 | [9f2e47e](https://github.com/vincentcibin-a11y/EduBridge/commit/9f2e47ed12adcb995f6d6c583100d798e60eab8c) | Add backend API integration coverage |
+| 2026-09-26 | [ff049fc](https://github.com/vincentcibin-a11y/EduBridge/commit/ff049fceefebbb7070819b8f652c48117a11c5e1) | Run backend integration tests with MongoDB in CI |
+| 2026-09-26 | [76cf73d](https://github.com/vincentcibin-a11y/EduBridge/commit/76cf73d219cf314b31a8b59013ab27d18f389f8a) | Add Docker Compose development environment |
+| 2026-09-26 | [ccdb395](https://github.com/vincentcibin-a11y/EduBridge/commit/ccdb3951353e3f20dfba5f365dc53128026e39ab) | Document Docker Compose development setup |
+| 2026-09-27 | [2914f08](https://github.com/vincentcibin-a11y/EduBridge/commit/2914f0889523cbf3c7d2dcccf0580b15cce74d54) | Add syllabus-aligned Scrum Book |
+| 2026-09-27 | [534642c](https://github.com/vincentcibin-a11y/EduBridge/commit/534642c15a753c39da729f2aa7008e51418b4bae) | Add MCA mini project documentation |
+| 2026-09-27 | [8a41215](https://github.com/vincentcibin-a11y/EduBridge/commit/8a41215375251d3e2eefdb5aade84ff9ef1ad448) | Link academic documentation from README |
+
+For the final submission, add the relevant commit SHA and date for each major feature increment, and add release tags only when they are actually created. Do not backdate sprint records.
 
 ## 4.2 Release notes template
 For every version, record:
