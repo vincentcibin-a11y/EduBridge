@@ -32,6 +32,9 @@ jobs:
       - name: Validate Docker Compose configuration
         run: docker compose config --quiet
 
+      - name: Build Docker images
+        run: docker compose build
+
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
