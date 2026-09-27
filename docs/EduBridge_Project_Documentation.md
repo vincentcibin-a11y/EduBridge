@@ -126,7 +126,101 @@ MongoDB + Mongoose
 | Notification | Recipient, message/type, related item, read status |
 | Review | Completed booking reference, learner, tutor, rating, optional feedback |
 
-Confirm exact field names and cardinality against the final Mongoose model files. Include a separately prepared ER diagram in the final academic submission.
+Confirm exact field names and cardinality against the final Mongoose model files.
+
+#### 4.3.1 Entity-relationship diagram
+
+The following logical ERD reflects the repository's Mongoose models. Answers are embedded subdocuments within a Doubt, not a separate MongoDB collection. Confirm the diagram against the final model files before submission.
+
+~~~mermaid
+erDiagram
+    USER ||--o{ DOUBT : authors
+    USER ||--o{ ANSWER : writes
+    DOUBT ||--o{ ANSWER : contains
+    USER ||--o{ BOOKING : learner
+    USER ||--o{ BOOKING : tutor
+    USER ||--o{ NOTIFICATION : receives
+    BOOKING ||--o| REVIEW : "has at most one"
+
+    USER {
+        ObjectId _id
+        string name
+        string email
+        string password
+        string college
+        string course
+        string semester
+        string bio
+        string[] skills
+        string[] subjects
+        string availability
+        number reputation
+        number ratingAverage
+        number ratingCount
+        string role
+    }
+    DOUBT {
+        ObjectId _id
+        ObjectId author
+        string title
+        string description
+        string subject
+        string[] tags
+        string status
+    }
+    ANSWER {
+        ObjectId user
+        string content
+        date createdAt
+    }
+    BOOKING {
+        ObjectId _id
+        ObjectId learner
+        ObjectId tutor
+        string subject
+        string mode
+        string date
+        string time
+        string status
+        boolean reviewedByLearner
+    }
+    NOTIFICATION {
+        ObjectId _id
+        ObjectId recipient
+        string type
+        string title
+        string message
+        string link
+        boolean read
+    }
+    REVIEW {
+        ObjectId _id
+        ObjectId booking
+        ObjectId learner
+        ObjectId tutor
+        number rating
+        string feedback
+    }
+~~~
+
+**Relationship notes:** The Review booking reference is unique, so a booking has at most one review. Doubt answers are stored as subdocuments, each with a reference to its author. User ratingAverage and ratingCount are denormalized summary fields maintained by the review workflow.
+
+#### 4.3.2 Requirements traceability
+
+Use this matrix to connect requirements to implementation and test evidence. “Automated coverage” describes the tests currently visible in the repository; it does not imply that every edge case is covered.
+
+| ID | Requirement | Implementation reference | Current verification / evidence |
+|---|---|---|---|
+| FR-01 | Register and log in securely | POST /api/auth/register, POST /api/auth/login | Integration test covers registration and login; record local run if performed. |
+| FR-02 | View and update profile | GET/PUT /api/auth/profile | Manual profile update test still needs to be recorded. |
+| FR-03 | Create and answer doubts; change status | /api/doubts, /api/doubts/:id/answers, /api/doubts/:id/status | Integration test covers create, answer and resolve; search edge cases need separate evidence. |
+| FR-04 | Search peer tutors | GET /api/tutors | Perform and record name, subject and skill searches locally. |
+| FR-05 | Request and manage tutoring | /api/bookings and accept/reject/complete routes | Integration test covers request, accept and completion; record rejection and invalid-state tests. |
+| FR-06 | View and mark notifications read | /api/notifications | Automated malformed-ID check exists; successful read/read-all workflow needs evidence. |
+| FR-07 | Review a completed session | POST /api/reviews/booking/:bookingId, GET /api/reviews/tutor/:tutorId | Integration test covers review, tutor summary and duplicate-review rejection. |
+| FR-08 | Run repeatable build/validation checks | .github/workflows/ci.yml, Docker Compose | Retain the successful CI run URL and local Docker startup/health-check evidence. |
+
+
 
 ### 4.4 Main workflow
 1. Student registers or logs in.
@@ -253,6 +347,8 @@ Use a strong private JWT secret for the environment. Never commit `.env` files, 
 ## 8. Testing and validation
 
 Testing should cover authentication, profile validation, doubt creation/search/answers, tutor discovery, booking rules, notification read state, review creation, and frontend build.
+
+Run backend checks from `backend/` with `npm test`. The current test suite includes API-level tests and a MongoDB-backed integration workflow. The integration suite requires a reachable test database; CI provides a dedicated MongoDB service. Record the actual local command output and do not copy CI success as proof that manual browser acceptance testing has been completed.
 
 | Test area | Key validation |
 |---|---|
