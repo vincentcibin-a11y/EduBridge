@@ -219,6 +219,9 @@ Use this matrix to connect requirements to implementation and test evidence. “
 | FR-06 | View and mark notifications read | /api/notifications | Automated malformed-ID check exists; successful read/read-all workflow needs evidence. |
 | FR-07 | Review a completed session | POST /api/reviews/booking/:bookingId, GET /api/reviews/tutor/:tutorId | Integration test covers review, tutor summary and duplicate-review rejection. |
 | FR-08 | Run repeatable build/validation checks | .github/workflows/ci.yml, Docker Compose | Retain the successful CI run URL and local Docker startup/health-check evidence. |
+| FR-09 | Update student profile and discover tutors | /api/auth/profile, GET /api/tutors | Integration tests cover profile updates and subject-based tutor search. |
+| FR-10 | Read notifications safely | /api/notifications/:id/read, /api/notifications/read-all | Integration tests cover single/read-all actions and cross-user access rejection. |
+| FR-11 | Reject tutoring requests | PUT /api/bookings/:id/reject | Integration test covers rejection and prevents completion of rejected sessions. |
 
 
 
