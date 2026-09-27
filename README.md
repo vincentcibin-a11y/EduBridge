@@ -317,6 +317,7 @@ The Second Review MVP intentionally prioritizes the core workflow. Next iteratio
 
 - [EduBridge Scrum Book](docs/EduBridge_Scrum_Book.md) — product backlog, design registers, testing records, version history, and sprint/meeting templates.
 - [EduBridge Project Documentation](docs/EduBridge_Project_Documentation.md) — project overview, requirements, architecture, data model, modules, APIs, testing strategy, setup, and future work.
+- [Manual Acceptance Test Evidence](docs/Manual_Acceptance_Test_Evidence.md) — blank checklist for recording real end-to-end, Docker, and browser test results.
 
 ## Academic Project Context
 
