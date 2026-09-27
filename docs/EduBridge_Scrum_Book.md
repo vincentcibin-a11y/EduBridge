@@ -154,6 +154,9 @@ Use unit-level checks where available, API validation, integration testing with 
 | TC-14 | Submit duplicate review | Duplicate is rejected | Fill after execution | Not recorded |
 | TC-15 | Mark notification(s) as read | Read state is updated | Fill after execution | Not recorded |
 | TC-16 | Run frontend production build | Build completes successfully | Fill after execution | Not recorded |
+| TC-17 | Update profile and search tutor by subject | Profile is saved; matching tutor appears and own profile is excluded | Fill after execution | Automated integration test added |
+| TC-18 | Mark one/all notifications read and attempt cross-user access | Read state updates; another user's notification is not exposed | Fill after execution | Automated integration test added |
+| TC-19 | Reject a pending booking and attempt completion | Booking is rejected; completion returns conflict | Fill after execution | Automated integration test added |
 
 ## 3.3 Defect log
 
@@ -193,6 +196,7 @@ The following entries are taken from GitHub commit history. GitHub timestamps ar
 | 2026-09-27 | [2914f08](https://github.com/vincentcibin-a11y/EduBridge/commit/2914f0889523cbf3c7d2dcccf0580b15cce74d54) | Add syllabus-aligned Scrum Book |
 | 2026-09-27 | [534642c](https://github.com/vincentcibin-a11y/EduBridge/commit/534642c15a753c39da729f2aa7008e51418b4bae) | Add MCA mini project documentation |
 | 2026-09-27 | [8a41215](https://github.com/vincentcibin-a11y/EduBridge/commit/8a41215375251d3e2eefdb5aade84ff9ef1ad448) | Link academic documentation from README |
+| 2026-09-27 | [6dfabc3](https://github.com/vincentcibin-a11y/EduBridge/commit/6dfabc38726c898125c6c1585a1926c02421b335) | Expand integration coverage for profiles, tutor search, notifications, and rejection |
 
 For the final submission, add the relevant commit SHA and date for each major feature increment, and add release tags only when they are actually created. Do not backdate sprint records.
 
