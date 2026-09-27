@@ -367,6 +367,12 @@ Run backend checks from `backend/` with `npm test`. The current test suite inclu
 
 CI workflow: https://github.com/vincentcibin-a11y/EduBridge/actions
 
+### CI/CD pipeline status
+
+The GitHub Actions workflow currently validates the Docker Compose configuration, builds the Docker images, checks backend JavaScript syntax, runs the backend API/integration tests against a CI MongoDB service, and builds the frontend. This is automated continuous integration and container-build validation.
+
+**Automatic production deployment is not configured yet.** A deployment job should be added only after the hosting target and production configuration are agreed. Before enabling it, configure a production MongoDB URI, a strong JWT secret stored as a protected repository/environment secret, the deployed frontend origin for CORS, HTTPS, and a post-deployment health check. Do not use the local development Compose defaults for production.
+
 ## 9. Security and privacy
 - Store password hashes, not plaintext passwords.
 - Keep JWT secrets outside source control and require a secure secret in production.
