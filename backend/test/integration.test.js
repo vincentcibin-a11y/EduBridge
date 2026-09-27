@@ -174,4 +174,98 @@ test("registration, peer doubt solving, booking, completion and review work end 
     assert.equal(tutorReviews.body.reviews.length, 1);
     assert.equal(tutorReviews.body.reviews[0].rating, 5);
   });
+  await t.test("students can update profiles and search tutors by subject", async () => {
+    const learnerProfile = await request("/api/auth/profile", {
+      method: "PUT",
+      token: learner.token,
+      body: JSON.stringify({
+        bio: "Learner profile used in integration testing",
+        subjects: ["Data Structures"],
+        skills: ["Java"]
+      })
+    });
+    assert.equal(learnerProfile.response.status, 200, JSON.stringify(learnerProfile.body));
+    assert.deepEqual(learnerProfile.body.user.subjects, ["Data Structures"]);
+    assert.equal("password" in learnerProfile.body.user, false);
+
+    const tutorProfile = await request("/api/auth/profile", {
+      method: "PUT",
+      token: tutor.token,
+      body: JSON.stringify({
+        subjects: ["DBMS", "Data Structures"],
+        skills: ["MongoDB", "SQL"],
+        availability: "Weekends"
+      })
+    });
+    assert.equal(tutorProfile.response.status, 200, JSON.stringify(tutorProfile.body));
+
+    const search = await request("/api/tutors?subject=DBMS", { token: learner.token });
+    assert.equal(search.response.status, 200, JSON.stringify(search.body));
+    assert.ok(search.body.tutors.some((item) => String(item._id) === tutor.user.id));
+    assert.equal(search.body.tutors.some((item) => String(item._id) === learner.user.id), false);
+  });
+
+  await t.test("notification read actions work and users cannot read another student's notification", async () => {
+    const learnerNotifications = await request("/api/notifications", { token: learner.token });
+    assert.equal(learnerNotifications.response.status, 200);
+    assert.ok(learnerNotifications.body.notifications.length > 0);
+
+    const notificationId = learnerNotifications.body.notifications[0]._id;
+    const crossUserRead = await request(`/api/notifications/${notificationId}/read`, {
+      method: "PUT",
+      token: tutor.token
+    });
+    assert.equal(crossUserRead.response.status, 404);
+
+    const markedOne = await request(`/api/notifications/${notificationId}/read`, {
+      method: "PUT",
+      token: learner.token
+    });
+    assert.equal(markedOne.response.status, 200, JSON.stringify(markedOne.body));
+    assert.equal(markedOne.body.notification.read, true);
+
+    const markedAll = await request("/api/notifications/read-all", {
+      method: "PUT",
+      token: learner.token
+    });
+    assert.equal(markedAll.response.status, 200);
+    assert.equal(markedAll.body.message, "All notifications marked as read");
+
+    const afterReadAll = await request("/api/notifications", { token: learner.token });
+    assert.equal(afterReadAll.body.unread, 0);
+  });
+
+  await t.test("tutor can reject a pending request and rejected sessions cannot be completed", async () => {
+    const tomorrow = new Date();
+    tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
+    const date = tomorrow.toISOString().slice(0, 10);
+
+    const created = await request("/api/bookings", {
+      method: "POST",
+      token: learner.token,
+      body: JSON.stringify({
+        tutor: tutor.user.id,
+        subject: "Data Structures",
+        mode: "offline",
+        date,
+        time: "15:00",
+        location: "Test campus"
+      })
+    });
+    assert.equal(created.response.status, 201, JSON.stringify(created.body));
+    const rejectedId = created.body.booking._id;
+
+    const rejected = await request(`/api/bookings/${rejectedId}/reject`, {
+      method: "PUT",
+      token: tutor.token
+    });
+    assert.equal(rejected.response.status, 200, JSON.stringify(rejected.body));
+    assert.equal(rejected.body.booking.status, "rejected");
+
+    const completion = await request(`/api/bookings/${rejectedId}/complete`, {
+      method: "PUT",
+      token: tutor.token
+    });
+    assert.equal(completion.response.status, 409);
+  });
 });
