@@ -1,5 +1,18 @@
 # EduBridge
 
+[![EduBridge CI](https://github.com/vincentcibin-a11y/EduBridge/actions/workflows/ci.yml/badge.svg)](https://github.com/vincentcibin-a11y/EduBridge/actions/workflows/ci.yml)
+
+**MCA mini project · Peer-to-peer academic doubt solving and student tutoring**
+
+- [Run locally](#quick-start-with-docker-compose-recommended)
+- [Features and technology stack](#second-review-mvp)
+- [API overview](#api-overview)
+- [Project documentation](docs/EduBridge_Project_Documentation.md)
+- [Scrum Book](docs/EduBridge_Scrum_Book.md)
+- [Manual acceptance tests](docs/Manual_Acceptance_Test_Evidence.md)
+- [Final submission checklist](docs/Final_Submission_Checklist.md)
+
+
 ## Peer-to-Peer Academic Doubt Solving & Student Tutoring Platform
 
 EduBridge is a college-focused peer-learning web application where students can ask academic doubts, answer classmates' questions, discover knowledgeable peers and arrange structured tutoring sessions.
@@ -317,7 +330,15 @@ The Second Review MVP intentionally prioritizes the core workflow. Next iteratio
 
 - [EduBridge Scrum Book](docs/EduBridge_Scrum_Book.md) — product backlog, design registers, testing records, version history, and sprint/meeting templates.
 - [EduBridge Project Documentation](docs/EduBridge_Project_Documentation.md) — project overview, requirements, architecture, data model, modules, APIs, testing strategy, setup, and future work.
-- [Manual Acceptance Test Evidence](docs/Manual_Acceptance_Test_Evidence.md) — blank checklist for recording real end-to-end, Docker, and browser test results.
+- [Manual Acceptance Test Evidence](docs/Manual_Acceptance_Test_Evidence.md) — checklist for recording real end-to-end, Docker, and browser test results.
+- [Final Submission Checklist](docs/Final_Submission_Checklist.md) — final verification steps for source code, CI, Docker, manual tests, screenshots, and academic deliverables.
+- [Screenshot Evidence Folder](docs/evidence/README.md) — screenshot naming and privacy guidance.
+
+## Verification Status
+
+The GitHub Actions workflow checks the Docker Compose configuration, builds the Docker images, checks backend JavaScript syntax, runs backend automated tests, and builds the frontend. The badge at the top links to the workflow history.
+
+**Important:** a passing CI workflow is not a substitute for manual browser testing. Complete the [Manual Acceptance Test Evidence](docs/Manual_Acceptance_Test_Evidence.md) and [Final Submission Checklist](docs/Final_Submission_Checklist.md) using results observed on your own running instance. Do not mark tests as passed or claim deployment until verified.
 
 ## Academic Project Context
 
