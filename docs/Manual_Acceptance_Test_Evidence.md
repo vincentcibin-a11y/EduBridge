@@ -8,8 +8,8 @@
 
 | Field | Value |
 |---|---|
-| Tester | |
-| Date and time | |
+| Tester | Cibin Vincent|
+| Date and time | 29/09/2026 8:40|
 | Git commit / version | |
 | Environment | Local / Docker / Staging |
 | Browser and version | |
