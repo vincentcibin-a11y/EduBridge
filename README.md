@@ -77,7 +77,7 @@ git clone https://github.com/vincentcibin-a11y/EduBridge.git
 cd EduBridge
 ```
 
-Create a root `.env` file:
+Copy `.env.example` to `.env` and replace the placeholder:
 
 ```env
 JWT_SECRET=replace-with-a-long-random-development-secret
