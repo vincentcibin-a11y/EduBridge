@@ -40,7 +40,19 @@ async function json(response) {
 test("GET /api/health returns the service health payload", async () => {
   const response = await request("/api/health");
   assert.equal(response.status, 200);
-  assert.deepEqual(await json(response), { status: "ok", service: "EduBridge API" });
+  assert.deepEqual(await json(response), {
+    status: "ok",
+    service: "EduBridge API",
+    version: "1.0.0"
+  });
+  assert.equal(response.headers.get("x-content-type-options"), "nosniff");
+  assert.equal(response.headers.get("x-frame-options"), "DENY");
+  assert.equal(response.headers.get("cache-control"), "no-store");
+});
+
+test("health endpoint does not expose Express implementation details", async () => {
+  const response = await request("/api/health");
+  assert.equal(response.headers.get("x-powered-by"), null);
 });
 
 test("unknown API paths return a JSON 404", async () => {
