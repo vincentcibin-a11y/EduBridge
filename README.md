@@ -1,352 +1,217 @@
 # EduBridge
 
 [![EduBridge CI](https://github.com/vincentcibin-a11y/EduBridge/actions/workflows/ci.yml/badge.svg)](https://github.com/vincentcibin-a11y/EduBridge/actions/workflows/ci.yml)
+[![Node 20](https://img.shields.io/badge/Node.js-20.x-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=111827)](https://react.dev/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-7-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
 
-**MCA mini project · Peer-to-peer academic doubt solving and student tutoring**
+> **MCA Mini Project · Full-stack peer-to-peer academic doubt solving and student tutoring platform**
 
-- [Run locally](#quick-start-with-docker-compose-recommended)
-- [Features and technology stack](#second-review-mvp)
-- [API overview](#api-overview)
-- [Project documentation](docs/EduBridge_Project_Documentation.md)
-- [Scrum Book](docs/EduBridge_Scrum_Book.md)
-- [Manual acceptance tests](docs/Manual_Acceptance_Test_Evidence.md)
-- [Final submission checklist](docs/Final_Submission_Checklist.md)
+EduBridge helps college students learn from one another. A student can ask an academic doubt, receive peer answers, discover a knowledgeable tutor, request a session, complete it, and leave a review.
 
+## ✨ Core workflow
 
-## Peer-to-Peer Academic Doubt Solving & Student Tutoring Platform
+`Register → Profile → Ask Doubt → Peer Answer → Find Tutor → Request Session → Accept/Reject → Complete → Review`
 
-EduBridge is a college-focused peer-learning web application where students can ask academic doubts, answer classmates' questions, discover knowledgeable peers and arrange structured tutoring sessions.
+### Highlights
 
-> **Core idea:** Every student can be both a learner and a peer tutor.
+- 🔐 JWT authentication with bcrypt password hashing
+- 👤 Student profiles with subjects, skills and availability
+- 💬 Academic doubt board with search and peer answers
+- 🔎 Tutor discovery by name, subject and skill
+- 📅 Online/offline tutoring requests with scheduling
+- 🔔 In-app notifications for answers and booking updates
+- ⭐ Session completion, reputation points and 1–5 tutor reviews
+- 🛡️ Protected REST APIs, validation, ownership checks and security headers
+- 🧪 Automated API + MongoDB integration tests
+- 🐳 Docker Compose development environment
+- ⚙️ GitHub Actions CI for syntax checks, tests, Docker builds and frontend builds
 
-## Second Review MVP
+## 🏗️ Architecture
 
-The repository now contains a full-stack MVP for the core learner-to-tutor journey:
+```text
+┌──────────────────────┐
+│ React 18 + Vite      │
+│ Responsive UI        │
+└──────────┬───────────┘
+           │ Axios / REST
+           ▼
+┌──────────────────────┐
+│ Express.js API       │
+│ JWT + validation     │
+│ Auth / Doubts /      │
+│ Tutors / Bookings /  │
+│ Notifications /      │
+│ Reviews              │
+└──────────┬───────────┘
+           │ Mongoose
+           ▼
+┌──────────────────────┐
+│ MongoDB 7            │
+│ Persistent data      │
+└──────────────────────┘
+```
 
-**Register/Login → Profile → Ask Doubt → Peer Answer → Find Tutor → Tutoring Request → Accept/Reject → Scheduled Session → Complete**
-
-### Implemented
-
-- JWT authentication with bcrypt password hashing
-- Student profile with subjects, skills and availability
-- Academic doubt creation, search and detail view
-- Peer answers
-- Peer tutor discovery by name, subject and skill
-- Online/offline tutoring requests
-- Date, time and campus-location scheduling
-- Tutor accept/reject workflow
-- Session completion, basic reputation points, and learner ratings/feedback
-- Responsive React student dashboard
-- MongoDB/Mongoose persistence
-- Protected Express REST APIs
-- In-app notifications for doubt answers and tutoring-request updates
-- Session reviews with 1–5 ratings, optional feedback, and tutor rating averages
-
-### Technology Stack
+## 🧰 Technology stack
 
 | Layer | Technology |
 |---|---|
 | Frontend | React 18, Vite, React Router, Axios, Lucide React |
-| Backend | Node.js, Express.js |
-| Database | MongoDB + Mongoose |
-| Authentication | JWT + bcryptjs |
+| Backend | Node.js 20, Express.js |
+| Database | MongoDB 7, Mongoose |
+| Authentication | JWT, bcryptjs |
 | Styling | Responsive CSS |
-| Development environment | Docker + Docker Compose |
-| Version Control | Git + GitHub |
+| DevOps | Docker, Docker Compose, GitHub Actions |
+| Testing | Node.js test runner, HTTP/API integration tests |
+| Version control | Git, GitHub |
 
-## Project Structure
+## 🚀 Quick start
 
-```text
-EduBridge/
-├── docker-compose.yml
-├── frontend/
-│   ├── Dockerfile
-│   ├── .dockerignore
-│   ├── src/
-│   │   ├── App.jsx
-│   │   ├── api.js
-│   │   ├── main.jsx
-│   │   └── styles.css
-│   ├── index.html
-│   └── package.json
-├── backend/
-│   ├── Dockerfile
-│   ├── .dockerignore
-│   ├── middleware/
-│   ├── models/
-│   ├── routes/
-│   ├── test/
-│   ├── .env.example
-│   ├── package.json
-│   └── server.js
-├── .github/
-│   └── workflows/
-│       └── ci.yml
-├── .gitignore
-└── README.md
-```
+### Option A — Docker Compose
 
-## Quick Start with Docker Compose (Recommended)
-
-Docker Compose starts the frontend, backend API and MongoDB together. You do not need to install Node.js or MongoDB directly on your computer, but you do need Docker Desktop (Windows/macOS) or Docker Engine with the Compose plugin (Linux).
-
-### 1. Install and start Docker
-
-Install Docker Desktop from [docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop/) and make sure it is running.
-
-### 2. Clone the repository
+Prerequisite: Docker Desktop or Docker Engine with Compose.
 
 ```bash
 git clone https://github.com/vincentcibin-a11y/EduBridge.git
 cd EduBridge
 ```
 
-### 3. (Recommended) Set a local JWT secret
-
-Compose has a development-only fallback secret so the project can start immediately. For your own local environment, create a file named `.env` in the repository root and set a unique secret:
+Copy `.env.example` to `.env` and replace the placeholder:
 
 ```env
-JWT_SECRET=replace-with-a-long-random-local-development-secret
-```
-
-The root `.env` file is ignored by Git. Do not use the development fallback or commit secrets in a production deployment.
-
-### 4. Build and start all services
-
-Run from the repository root:
-
-```bash
-docker compose up --build
-```
-
-The first run downloads the images and installs Node dependencies, so it may take a few minutes. Keep this terminal open to see service logs.
-
-Open these URLs:
-
-- **EduBridge frontend:** http://localhost:5173
-- **Backend health check:** http://localhost:5000/api/health
-- **MongoDB:** `mongodb://localhost:27017/edubridge`
-
-The backend waits for MongoDB's health check before starting. The MongoDB database is stored in a named Docker volume and persists when containers are stopped.
-
-### 5. Stop or restart the services
-
-Stop the running stack with `Ctrl+C`, or from another terminal run:
-
-```bash
-docker compose down
-```
-
-Start it again later with:
-
-```bash
-docker compose up
-```
-
-To rebuild after changing a Dockerfile or dependencies:
-
-```bash
-docker compose up --build
-```
-
-To follow logs for one service:
-
-```bash
-docker compose logs -f backend
-docker compose logs -f frontend
-docker compose logs -f mongo
-```
-
-To remove the containers **and permanently delete the local MongoDB data volume**, run:
-
-```bash
-docker compose down -v
-```
-
-Only use `-v` if you intentionally want to erase the development database.
-
-### Development workflow with Docker
-
-The source folders are mounted into the frontend and backend containers. Code changes should be picked up by Vite and Nodemon, allowing hot reload without rebuilding the images. Dependencies are kept in named volumes so the host's `node_modules` folder does not overwrite the container's Linux dependencies.
-
-If you change dependencies in either `package.json` or its lockfile, rebuild the services with `docker compose up --build`.
-
-### Troubleshooting
-
-- **Docker daemon error:** Start Docker Desktop and wait until its engine is running.
-- **Port already in use:** Stop the other service using port 5173, 5000 or 27017, or change the host-side port mapping in `docker-compose.yml`.
-- **Frontend cannot reach the API:** Open the frontend at `http://localhost:5173` and check that the backend health check at `http://localhost:5000/api/health` returns JSON with `"status": "ok"`.
-- **Dependency changes are not reflected:** Run `docker compose up --build` to rebuild the affected image.
-- **Reset local data:** `docker compose down -v` deletes the MongoDB volume as well as the containers. This cannot be undone.
-
-> **Scope:** These Dockerfiles and Compose settings are for local development. Before production deployment, use a strong secret managed outside source control, production-appropriate images/configuration, and a deployment-specific setup.
-
-## Local Setup (without Docker)
-
-### 1. Clone
-
-```bash
-git clone https://github.com/vincentcibin-a11y/EduBridge.git
-cd EduBridge
-```
-
-### 2. Start MongoDB
-
-Use a local MongoDB service or MongoDB Atlas.
-
-### 3. Start the backend
-
-```bash
-cd backend
-npm install
-```
-
-Create a `.env` file from `.env.example`:
-
-```env
-PORT=5000
-MONGODB_URI=mongodb://127.0.0.1:27017/edubridge
-JWT_SECRET=replace-with-a-long-random-secret
-CLIENT_URL=http://localhost:5173
+JWT_SECRET=replace-with-a-long-random-development-secret
 ```
 
 Then:
 
 ```bash
+docker compose up --build
+```
+
+Open:
+
+- Frontend: http://localhost:5173
+- API health: http://localhost:5000/api/health
+
+Stop:
+
+```bash
+docker compose down
+```
+
+Reset the development database:
+
+```bash
+docker compose down -v
+```
+
+### Option B — Run without Docker
+
+Start MongoDB, then:
+
+```bash
+cd backend
+npm ci
+# create backend/.env from backend/.env.example
 npm run dev
 ```
 
-The API runs on `http://localhost:5000`.
-
-### 4. Start the frontend
-
-Open another terminal:
+In another terminal:
 
 ```bash
 cd frontend
-npm install
+npm ci
 npm run dev
 ```
 
-Open the Vite URL shown in the terminal, normally `http://localhost:5173`.
+## 🧪 Testing
 
-### Windows note
+Backend automated tests:
 
-Instead of `cp .env.example .env`, you can use:
-
-```powershell
-Copy-Item .env.example .env
+```bash
+cd backend
+npm ci
+npm test
 ```
 
-## Second Review Demo
+Frontend production build:
 
-Use two student accounts.
-
-### Student A — Learner
-
-1. Register and log in.
-2. Update the profile with subjects and skills.
-3. Create a DBMS/Java/Python doubt.
-4. Open the doubt and view/post peer answers.
-5. Open **Find a Tutor**.
-6. Select Student B.
-7. Send an offline or online tutoring request with date, time and location.
-
-### Student B — Peer Tutor
-
-1. Register and log in.
-2. Add subjects, skills and availability.
-3. Open **My Sessions**.
-4. Accept or reject the incoming request.
-
-### Student A
-
-1. Open **My Sessions**.
-2. Confirm the scheduled session.
-3. Complete the session.
-
-This demonstrates the central project workflow:
-
-```text
-Student
-  ↓
-Authentication
-  ↓
-Ask Doubt
-  ↓
-Peer Answer
-  ↓
-Find Tutor
-  ↓
-Tutoring Request
-  ↓
-Tutor Accepts
-  ↓
-Schedule Session
-  ↓
-Complete Session
+```bash
+cd frontend
+npm ci
+npm run build
 ```
 
-## API Overview
+CI also validates Docker Compose configuration, builds both images, checks backend JavaScript syntax, runs the backend test suite and builds the frontend.
+
+> CI is not a substitute for browser acceptance testing. Record real manual results in the academic test documentation.
+
+## 🔌 API overview
 
 | Method | Endpoint | Purpose |
 |---|---|---|
-| GET | `/api/health` | API health check |
+| GET | `/api/health` | Health check |
 | POST | `/api/auth/register` | Register |
 | POST | `/api/auth/login` | Login |
-| GET | `/api/auth/profile` | Current profile |
-| PUT | `/api/auth/profile` | Update profile |
-| GET | `/api/doubts` | List/search doubts |
-| POST | `/api/doubts` | Create doubt |
+| GET/PUT | `/api/auth/profile` | Read/update profile |
+| GET/POST | `/api/doubts` | List/create doubts |
 | GET | `/api/doubts/:id` | View doubt |
 | POST | `/api/doubts/:id/answers` | Add peer answer |
-| PUT | `/api/doubts/:id/status` | Resolve/open doubt |
-| GET | `/api/tutors` | Discover peer tutors |
+| PUT | `/api/doubts/:id/status` | Resolve/reopen doubt |
+| GET | `/api/tutors` | Discover tutors |
 | GET | `/api/tutors/:id` | View tutor |
-| GET | `/api/bookings` | List sessions |
-| POST | `/api/bookings` | Send tutoring request |
+| GET/POST | `/api/bookings` | View/create sessions |
 | PUT | `/api/bookings/:id/accept` | Accept request |
 | PUT | `/api/bookings/:id/reject` | Reject request |
 | PUT | `/api/bookings/:id/complete` | Complete session |
-| GET | `/api/notifications` | List notifications |
-| PUT | `/api/notifications/:id/read` | Mark one notification as read |
-| PUT | `/api/notifications/read-all` | Mark all notifications as read |
-| POST | `/api/reviews/booking/:bookingId` | Review a completed session |
-| GET | `/api/reviews/tutor/:tutorId` | List reviews for a tutor |
+| GET/PUT | `/api/notifications` | Manage notifications |
+| POST | `/api/reviews/booking/:bookingId` | Submit review |
+| GET | `/api/reviews/tutor/:tutorId` | View tutor reviews |
 
-## Development Roadmap
+## 📚 Academic documentation
 
-The Second Review MVP intentionally prioritizes the core workflow. Next iterations can add:
+- [Project Documentation](docs/EduBridge_Project_Documentation.md)
+- [Scrum Book](docs/EduBridge_Scrum_Book.md)
+- [Manual Acceptance Test Evidence](docs/Manual_Acceptance_Test_Evidence.md)
+- [Final Submission Checklist](docs/Final_Submission_Checklist.md)
+- [Screenshot Evidence Guide](docs/evidence/README.md)
 
-- Socket.IO real-time chat
-- Academic resource sharing
-- More detailed reputation and review moderation
-- Admin moderation dashboard
-- Additional automated tests
-- Production deployment
-- Enhanced college verification
+## 🔒 Security
 
-## Academic Documentation
+- Secrets are excluded from Git through `.gitignore`.
+- Passwords are hashed with bcrypt.
+- JWT authentication protects application APIs.
+- User-owned resources enforce authorization checks.
+- Request bodies have a 1 MB limit.
+- API responses use no-store caching.
+- Basic browser security headers are enabled.
+- CORS is restricted to configured development origins.
+- Production startup rejects missing or weak JWT secrets.
 
-- [EduBridge Scrum Book](docs/EduBridge_Scrum_Book.md) — product backlog, design registers, testing records, version history, and sprint/meeting templates.
-- [EduBridge Project Documentation](docs/EduBridge_Project_Documentation.md) — project overview, requirements, architecture, data model, modules, APIs, testing strategy, setup, and future work.
-- [Manual Acceptance Test Evidence](docs/Manual_Acceptance_Test_Evidence.md) — checklist for recording real end-to-end, Docker, and browser test results.
-- [Final Submission Checklist](docs/Final_Submission_Checklist.md) — final verification steps for source code, CI, Docker, manual tests, screenshots, and academic deliverables.
-- [Screenshot Evidence Folder](docs/evidence/README.md) — screenshot naming and privacy guidance.
+See [SECURITY.md](SECURITY.md) for responsible disclosure guidance.
 
-## Verification Status
-
-The GitHub Actions workflow checks the Docker Compose configuration, builds the Docker images, checks backend JavaScript syntax, runs backend automated tests, and builds the frontend. The badge at the top links to the workflow history.
-
-**Important:** a passing CI workflow is not a substitute for manual browser testing. Complete the [Manual Acceptance Test Evidence](docs/Manual_Acceptance_Test_Evidence.md) and [Final Submission Checklist](docs/Final_Submission_Checklist.md) using results observed on your own running instance. Do not mark tests as passed or claim deployment until verified.
-
-## Academic Project Context
+## 🎓 Academic context
 
 **Student:** Cibin Vincent  
 **Program:** MCA  
-**ID:** FIT25MCA-2028  
-**Guide:** Ms. Senu Abi
+**Project:** EduBridge — Peer-to-Peer Academic Doubt Solving & Student Tutoring Platform
 
-## License
+## 📌 Project status
 
-This project is developed as an academic MCA mini project.
+**MVP complete for the core learner-to-tutor workflow.**
+
+Potential future enhancements include real-time chat, resource sharing, stronger college verification, moderation tooling, richer analytics and production deployment.
+
+---
+
+If you are evaluating this repository, the fastest demonstration is:
+
+1. Register two students.
+2. Add subjects/skills to the second student.
+3. Create a doubt from the first student.
+4. Answer it from the second student.
+5. Request a tutoring session.
+6. Accept it from the tutor account.
+7. Complete the session.
+8. Submit the learner review.
