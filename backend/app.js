@@ -15,6 +15,8 @@ const ALLOWED_ORIGINS = new Set([
   "http://localhost:5173"
 ]);
 
+app.disable("x-powered-by");
+
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin || ALLOWED_ORIGINS.has(origin)) {
@@ -23,11 +25,30 @@ app.use(cors({
     }
     callback(new Error("CORS policy: origin not allowed"));
   },
-  credentials: true
+  credentials: false
 }));
+
+// Lightweight security headers without another runtime dependency.
+app.use((req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("Referrer-Policy", "no-referrer");
+  res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  if (req.path.startsWith("/api/")) {
+    res.setHeader("Cache-Control", "no-store");
+  }
+  next();
+});
+
 app.use(express.json({ limit: "1mb" }));
 
-app.get("/api/health", (req, res) => res.json({ status: "ok", service: "EduBridge API" }));
+app.get("/api/health", (req, res) => {
+  res.json({
+    status: "ok",
+    service: "EduBridge API",
+    version: "1.0.0"
+  });
+});
 
 app.use("/api/auth", authRoutes);
 app.use("/api/doubts", doubtRoutes);
@@ -37,6 +58,7 @@ app.use("/api/notifications", notificationRoutes);
 app.use("/api/reviews", reviewRoutes);
 
 app.use((req, res) => res.status(404).json({ message: "Endpoint not found" }));
+
 app.use((err, req, res, next) => {
   if (err.message === "CORS policy: origin not allowed") {
     return res.status(403).json({ message: "Origin not allowed by CORS policy" });
