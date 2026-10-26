@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import { authLimiter, apiLimiter } from "./middleware/rateLimiter.js";
 import authRoutes from "./routes/auth.js";
 import doubtRoutes from "./routes/doubts.js";
 import tutorRoutes from "./routes/tutors.js";
@@ -12,7 +13,9 @@ const DEFAULT_CLIENT_URL = "http://localhost:5173";
 const ALLOWED_ORIGINS = new Set([
   process.env.CLIENT_URL || DEFAULT_CLIENT_URL,
   "http://127.0.0.1:5173",
-  "http://localhost:5173"
+  "http://localhost:5173",
+  "http://127.0.0.1:4173",
+  "http://localhost:4173"
 ]);
 
 app.disable("x-powered-by");
@@ -42,6 +45,8 @@ app.use((req, res, next) => {
 
 app.use(express.json({ limit: "1mb" }));
 
+app.use("/api/", apiLimiter);
+
 app.get("/api/health", (req, res) => {
   res.json({
     status: "ok",
@@ -50,7 +55,7 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-app.use("/api/auth", authRoutes);
+app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/doubts", doubtRoutes);
 app.use("/api/tutors", tutorRoutes);
 app.use("/api/bookings", bookingRoutes);

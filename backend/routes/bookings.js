@@ -49,6 +49,11 @@ router.post("/", auth, async (req, res) => {
     if (date < new Date().toISOString().slice(0, 10)) {
       return res.status(400).json({ message: "Session date cannot be in the past" });
     }
+    const maxFutureDate = new Date();
+    maxFutureDate.setFullYear(maxFutureDate.getFullYear() + 1);
+    if (date > maxFutureDate.toISOString().slice(0, 10)) {
+      return res.status(400).json({ message: "Session date cannot be more than 1 year in the future" });
+    }
 
     const tutorUser = await User.findById(tutor);
     if (!tutorUser) return res.status(404).json({ message: "Tutor not found" });

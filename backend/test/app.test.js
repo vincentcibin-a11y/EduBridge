@@ -134,3 +134,50 @@ test("malformed JSON returns a client error instead of a server error", async ()
   assert.equal(response.status, 400);
   assert.deepEqual(await json(response), { message: "Invalid JSON body" });
 });
+
+test("registration rejects passwords exceeding 128 characters", async () => {
+  const response = await request("/api/auth/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name: "Long Password Student",
+      email: "longpassword@example.test",
+      password: "a".repeat(129),
+      college: "FISAT"
+    })
+  });
+  assert.equal(response.status, 400);
+  assert.deepEqual(await json(response), {
+    message: "Password must not exceed 128 characters"
+  });
+});
+
+test("booking creation rejects session dates more than 1 year in the future", async () => {
+  const distantFuture = new Date();
+  distantFuture.setFullYear(distantFuture.getFullYear() + 2);
+  const response = await request("/api/bookings", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${userToken}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      tutor: "507f1f77bcf86cd799439012",
+      subject: "DBMS",
+      date: distantFuture.toISOString().slice(0, 10),
+      time: "10:00"
+    })
+  });
+  assert.equal(response.status, 400);
+  assert.deepEqual(await json(response), {
+    message: "Session date cannot be more than 1 year in the future"
+  });
+});
+
+test("API endpoints return rate-limiting headers", async () => {
+  const response = await request("/api/health");
+  assert.equal(response.status, 200);
+  assert.ok(response.headers.get("x-ratelimit-limit"));
+  assert.ok(response.headers.get("x-ratelimit-remaining"));
+});
+

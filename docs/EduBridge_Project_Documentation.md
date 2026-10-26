@@ -1,4 +1,4 @@
-# EduBridge — MCA Mini Project Documentation
+# EduBridge — MCA Main Project (20MCA246) Documentation
 
 **Project title:** EduBridge – A Peer-to-Peer Academic Doubt Solving and Student Tutoring Platform  
 **Student:** Cibin Vincent  
@@ -8,7 +8,7 @@
 **Institution:** Federal Institute of Science and Technology (FISAT), Angamaly  
 **Repository:** https://github.com/vincentcibin-a11y/EduBridge
 
-> This document describes the project and its current MVP scope. Verify screenshots, exact schema fields, test results, dates, and guide approvals against the final repository and actual demonstrations before submission.
+> This document describes the project and its comprehensive scope for the KTU MCA Main Project (Course Code: 20MCA246). Cross-reference with [Project Synopsis](PROJECT_SYNOPSIS.md), [Project Plan](PROJECT_PLAN.md), [Product Backlog](PRODUCT_BACKLOG.md), [Architecture Specification](ARCHITECTURE.md), and [Testing and Validation](TESTING_AND_VALIDATION.md).
 
 ## Abstract
 EduBridge is a college-focused peer-learning web application intended to connect students who need academic help with peers who can explain concepts or provide tutoring. Students can create academic doubts, search questions, post answers, discover tutors by subject and skill, request online or offline sessions, manage tutoring requests, receive in-app notifications, and review completed sessions. The system uses React and Vite for the frontend, Node.js and Express for the backend, MongoDB with Mongoose for persistence, and JWT-based authentication with bcrypt password hashing. The project applies an iterative Scrum approach and uses GitHub for source control and continuous integration.
@@ -33,7 +33,7 @@ Students need a convenient way to post academic doubts, receive peer answers, id
 The current MVP focuses on the student-to-student academic support workflow. Real-time chat, resource sharing, advanced administration, and production deployment are possible future enhancements.
 
 ## 2. Course and project approach
-The project is developed for the MCA Mini Project course. Work is organized as incremental deliverables with a product backlog, design records, testing records, and version history.
+The project is developed for the KTU MCA Main Project course (20MCA246). Work is organized as incremental deliverables with a formal product backlog, project schedule, architecture design records, testing records, and version history.
 
 ### 2.1 Scrum practices
 - Organize work into approximately two-week sprints.

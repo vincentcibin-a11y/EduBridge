@@ -1,6 +1,6 @@
 # EduBridge Final Submission Checklist
 
-Use this checklist before submitting the MCA mini project. It separates repository work that can be verified from evidence that must be collected by running the application and completing the academic review process.
+Use this checklist before submitting the MCA Main Project (20MCA246). It separates repository work that can be verified from evidence that must be collected by running the application and completing the academic review process.
 
 ## 1. Source code and repository
 
@@ -65,6 +65,11 @@ A screenshot may support more than one test. Do not include passwords, tokens, s
 
 ## 6. Academic documentation and presentation
 
+- [ ] Review [Project Synopsis](PROJECT_SYNOPSIS.md) and confirm problem statement and objectives.
+- [ ] Review [Project Plan](PROJECT_PLAN.md) for milestone traceability and risk assessment.
+- [ ] Review [Product Backlog](PRODUCT_BACKLOG.md) and confirm user stories and acceptance criteria.
+- [ ] Review [Architecture Specification](ARCHITECTURE.md) and component boundaries.
+- [ ] Review [Testing and Validation](TESTING_AND_VALIDATION.md) for verification evidence.
 - [ ] Review [Project Documentation](EduBridge_Project_Documentation.md) for accuracy and consistency with the implemented application.
 - [ ] Review the [Scrum Book](EduBridge_Scrum_Book.md) and fill in actual sprint/meeting/guide-feedback details where required. Do not invent meetings, approvals, or feedback.
 - [ ] Update the manual test record with actual results and screenshot filenames.

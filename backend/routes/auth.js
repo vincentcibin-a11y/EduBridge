@@ -50,6 +50,9 @@ router.post("/register", async (req, res) => {
     if (password.length < 6) {
       return res.status(400).json({ message: "Password must contain at least 6 characters" });
     }
+    if (password.length > 128) {
+      return res.status(400).json({ message: "Password must not exceed 128 characters" });
+    }
     if (name.length > 100 || email.length > 254 || college.length > 160 ||
         course.length > 100 || semester.length > 40) {
       return res.status(400).json({ message: "One or more fields exceed the allowed length" });

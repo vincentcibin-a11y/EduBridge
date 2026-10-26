@@ -1,5 +1,5 @@
 # EduBridge Scrum Book
-## MCA Mini Project — FISAT
+## MCA Main Project — 20MCA246 — FISAT
 
 **Project:** EduBridge – A Peer-to-Peer Academic Doubt Solving and Student Tutoring Platform  
 **Student:** Cibin Vincent  
@@ -8,7 +8,7 @@
 **Project Guide:** Ms. Senu Abi  
 **Repository:** https://github.com/vincentcibin-a11y/EduBridge
 
-> **Record-keeping note:** This is an editable Scrum Book template aligned with the MCA Mini Project syllabus. Enter actual meeting dates, attendance, guide feedback, test outcomes, and approvals as they occur. Do not treat planned sprint activities as completed work unless verified.
+> **Record-keeping note:** This is an editable Scrum Book aligned with the KTU MCA Main Project (20MCA246) syllabus. Enter actual meeting dates, attendance, guide feedback, test outcomes, and approvals as they occur. Do not treat planned sprint activities as completed work unless verified.
 
 ## Contents
 1. Product Backlog

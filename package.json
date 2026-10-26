@@ -1,0 +1,28 @@
+{
+  "name": "edubridge-root",
+  "version": "1.0.0",
+  "private": true,
+  "description": "EduBridge - Peer-to-peer academic doubt solving and student tutoring platform",
+  "scripts": {
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev": "node -e \"const { spawn } = require('child_process'); spawn('npm', ['--prefix', 'backend', 'run', 'dev'], { stdio: 'inherit', shell: true }); spawn('npm', ['--prefix', 'frontend', 'run', 'dev'], { stdio: 'inherit', shell: true });\"",
+    "test": "npm --prefix backend test",
+    "build": "npm --prefix frontend run build",
+    "check": "npm --prefix backend test && npm --prefix frontend run build",
+    "docker:up": "docker compose up --build",
+    "docker:down": "docker compose down",
+    "docker:clean": "docker compose down -v"
+  },
+  "keywords": [
+    "edubridge",
+    "peer-learning",
+    "tutoring",
+    "academic-doubt-solving",
+    "react",
+    "express",
+    "mongodb"
+  ],
+  "author": "Cibin Vincent",
+  "license": "MIT"
+}

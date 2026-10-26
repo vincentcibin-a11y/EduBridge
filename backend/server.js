@@ -19,9 +19,34 @@ if (process.env.NODE_ENV === "production" && process.env.JWT_SECRET.length < 32)
   process.exit(1);
 }
 
+let server;
+
 mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 5000 })
-  .then(() => app.listen(PORT, () => console.log(`EduBridge API running on http://localhost:${PORT}`)))
+  .then(() => {
+    server = app.listen(PORT, () => console.log(`EduBridge API running on http://localhost:${PORT}`));
+  })
   .catch((err) => {
     console.error("MongoDB connection failed:", err.message);
     process.exit(1);
   });
+
+const shutdown = async (signal) => {
+  console.log(`Received ${signal}. Shutting down gracefully...`);
+  if (server) {
+    await new Promise((resolve) => server.close(resolve));
+  }
+  await mongoose.disconnect();
+  process.exit(0);
+};
+
+process.on("SIGINT", () => shutdown("SIGINT"));
+process.on("SIGTERM", () => shutdown("SIGTERM"));
+
+process.on("unhandledRejection", (reason) => {
+  console.error("Unhandled Rejection:", reason);
+});
+
+process.on("uncaughtException", (error) => {
+  console.error("Uncaught Exception:", error);
+  process.exit(1);
+});
