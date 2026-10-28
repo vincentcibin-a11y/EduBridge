@@ -10,8 +10,9 @@ import reviewRoutes from "./routes/reviews.js";
 
 const app = express();
 const DEFAULT_CLIENT_URL = "http://localhost:5173";
+const configuredClientUrl = process.env.CLIENT_URL || DEFAULT_CLIENT_URL;
 const ALLOWED_ORIGINS = new Set([
-  process.env.CLIENT_URL || DEFAULT_CLIENT_URL,
+  configuredClientUrl,
   "http://127.0.0.1:5173",
   "http://localhost:5173",
   "http://127.0.0.1:4173",
@@ -44,6 +45,16 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json({ limit: "1mb" }));
+
+// JSON endpoints expect an object payload. Reject null, arrays and primitive JSON
+// values as client errors instead of allowing route handlers to throw a 500.
+app.use((req, res, next) => {
+  if (req.is("application/json") &&
+      (req.body === null || typeof req.body !== "object" || Array.isArray(req.body))) {
+    return res.status(400).json({ message: "JSON body must be an object" });
+  }
+  next();
+});
 
 app.use("/api/", apiLimiter);
 
