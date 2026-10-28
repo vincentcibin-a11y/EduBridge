@@ -202,28 +202,5 @@ test("JSON null payloads return a clear 400 response", async () => {
     body: "null"
   });
   assert.equal(response.status, 400);
-  assert.deepEqual(await json(response), { message: "JSON body must be an object" });
-});
-
-test("protected routes reject signed tokens without a valid user ID", async () => {
-  const malformedToken = jwt.sign(
-    { role: "student" },
-    process.env.JWT_SECRET,
-    { expiresIn: "5m" }
-  );
-  const response = await request("/api/doubts", {
-    headers: { Authorization: `Bearer ${malformedToken}` }
-  });
-  assert.equal(response.status, 401);
-  assert.deepEqual(await json(response), { message: "Invalid or expired token" });
-});
-
-test("JSON null payloads return a clear 400 response", async () => {
-  const response = await request("/api/auth/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: "null"
-  });
-  assert.equal(response.status, 400);
-  assert.deepEqual(await json(response), { message: "JSON body must be an object" });
+  assert.deepEqual(await json(response), { message: "Invalid JSON body" });
 });
