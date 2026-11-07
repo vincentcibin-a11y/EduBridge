@@ -204,3 +204,14 @@ test("JSON null payloads return a clear 400 response", async () => {
   assert.equal(response.status, 400);
   assert.deepEqual(await json(response), { message: "Invalid JSON body" });
 });
+
+
+test("JSON array payloads return a clear 400 response", async () => {
+  const response = await request("/api/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: "[]"
+  });
+  assert.equal(response.status, 400);
+  assert.deepEqual(await json(response), { message: "JSON body must be an object" });
+});
