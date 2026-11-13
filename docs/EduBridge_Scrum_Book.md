@@ -8,7 +8,7 @@
 **Internal Guide:** Ms. Senu Abi (confirm formal assignment)  
 **Repository:** https://github.com/vincentcibin-a11y/EduBridge
 
-> This Scrum Book follows the four prescribed parts: (1) Product Backlog, (2) Database & UI Design, (3) Testing & Validation and (4) Details of Versions. Make dated entries at regular intervals. Planned activities must remain separate from completed records. Never invent meeting attendance, feedback, approvals, test outcomes or evaluation results.
+> This Scrum Book follows the four prescribed parts: (1) Product Backlog, (2) Database & UI Design, (3) Testing & Validation and (4) Details of Versions. Make dated entries at regular intervals. Planned activities must remain separate from completed records. Never invent meeting attendance, feedback, approvals, test outcomes or evaluations.
 
 ## Contents
 1. Product Backlog
@@ -183,7 +183,7 @@ git push -u origin feature/doubt-search
 
 # Progress meeting register — approximately every three days
 
-The course encourages brief progress meetings approximately once every three days. Each meeting should be less than 15 minutes. Add actual date, attendees, progress, blocker and Scrum Master guidance after the meeting.
+The course encourages short progress meetings approximately once every three days. Each should be less than 15 minutes. Record actual date, attendees, completed work, next tasks, blockers and Scrum Master guidance after each meeting.
 
 | No. | Date/time | Attendees | Completed work | Next tasks | Blocker | Scrum Master comment / action |
 |---:|---|---|---|---|---|---|
@@ -205,7 +205,7 @@ Each sprint lasts two weeks. Every review should be no longer than 30 minutes an
 
 # Project Assessment Board register
 
-The HOD constitutes the five-member Board: HOD (Chair), project supervisor(s), one Department faculty member, one sister-Department faculty member and an external expert. For eligible external projects, the External Guide may be invited as external expert.
+The HOD constitutes the five-member Board: HOD (Chair), project supervisor(s), one Department faculty member, one sister-Department faculty member and an external expert. For an eligible external project, the External Guide may be invited as external expert.
 
 | Evaluation | Course week | Actual date | Presentation / demo | Board comments | Corrective action / owner | Evidence |
 |---|---:|---|---|---|---|---|
