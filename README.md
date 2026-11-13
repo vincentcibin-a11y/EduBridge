@@ -217,3 +217,4 @@ Before final evaluation, confirm synopsis approval, Product Owner and Scrum Mast
 ## License
 
 MIT License. See [LICENSE](LICENSE).
+
