@@ -2,7 +2,7 @@
 
 ## 1. Overview
 
-EduBridge is a three-tier web application for student peer learning. The React frontend presents doubt-sharing, tutor-discovery and session workflows. The Express backend exposes REST APIs and applies validation, authentication, authorisation and business rules. MongoDB stores the application data through Mongoose models.
+EduBridge is a three-tier web application for student peer learning. The React frontend presents doubt-sharing, tutor-discovery and session workflows. The Express backend exposes REST APIs and applies validation, authentication, authorisation and business rules. MongoDB stores application data through Mongoose models.
 
 ```mermaid
 flowchart TD
@@ -24,14 +24,7 @@ flowchart TD
 
 ### 2.1 Presentation layer — frontend
 
-The React client provides:
-- Registration and login.
-- Student dashboard and profile.
-- Academic doubt listing, creation, search and answer threads.
-- Tutor discovery and tutor profile.
-- Tutoring session requests and booking status management.
-- Notifications and read-state controls.
-- Review submission for completed sessions.
+The React client provides registration/login, student dashboard/profile, academic doubt listing/search/answers, tutor discovery, tutoring session requests, notifications and post-session reviews.
 
 The frontend calls the backend through Axios. Client-side validation improves usability; server-side validation remains authoritative.
 
@@ -53,8 +46,6 @@ The Node.js/Express API validates requests, verifies JWTs, checks resource owner
 | `backend/routes/reviews.js` | Review eligibility and tutor feedback |
 
 ### 2.3 Data layer — MongoDB
-
-Mongoose models define the persistent documents.
 
 | Model | Purpose |
 |---|---|
@@ -130,11 +121,11 @@ erDiagram
     }
 ```
 
-Doubt answers are embedded subdocuments, not a separate collection. Verify exact model fields and indexes against the final Mongoose schemas before submission.
+Doubt answers are embedded subdocuments, not a separate collection. Verify exact fields and indexes against the final Mongoose schemas before submission.
 
-## 4. Main application workflows
+## 4. Main workflows
 
-### 4.1 Doubt-solving workflow
+### 4.1 Doubt solving
 
 ```mermaid
 flowchart TD
@@ -145,7 +136,7 @@ flowchart TD
     E --> F[Author marks doubt resolved]
 ```
 
-### 4.2 Tutoring workflow
+### 4.2 Tutoring lifecycle
 
 ```mermaid
 stateDiagram-v2
@@ -184,17 +175,17 @@ flowchart TD
     DEPLOY --> HEALTH[Health / smoke test]
 ```
 
-The repository currently provides continuous integration and Docker image build validation. The deployment stage in this diagram is proposed; it is not a claim that production deployment is automated or completed.
+The repository currently provides continuous integration and Docker image build validation. The deployment stage above is proposed, not a claim that production deployment is configured or completed.
 
 ## 7. Deployment requirements
 
 Before a public production deployment:
 1. Select and approve the hosting provider.
-2. Configure a production MongoDB database and strong JWT secret through protected environment variables.
+2. Configure production MongoDB and a strong JWT secret through protected environment variables.
 3. Configure the frontend origin and CORS.
 4. Enable HTTPS and suitable logging/backup practices.
-5. Deploy the exact validated commit or release tag.
-6. Run the API health check and critical smoke tests.
+5. Deploy the exact validated commit/tag.
+6. Run API health checks and critical smoke tests.
 7. Record deployed URL, date, commit SHA, logs and rollback plan.
 
 ## 8. Course outcome traceability
