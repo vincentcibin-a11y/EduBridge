@@ -1,4 +1,6 @@
-# EduBridge — MCA Main Project (20MCA246) Documentation
+# EduBridge — MCA Main Project Documentation
+
+> **Course guideline alignment:** This report follows the supplied 14-week milestone plan and five two-week Scrum sprints. See [Project Plan](PROJECT_PLAN.md). The Scrum Book uses the four prescribed parts: Product Backlog; Database & UI Design; Testing & Validation; Details of Versions. Record actual stakeholder consultations, synopsis approval, meeting attendance, guide feedback, Board evaluations, external evaluation and deployment only after they occur.
 
 **Project title:** EduBridge – A Peer-to-Peer Academic Doubt Solving and Student Tutoring Platform  
 **Student:** Cibin Vincent  
@@ -32,27 +34,26 @@ Students need a convenient way to post academic doubts, receive peer answers, id
 ### 1.3 Scope
 The current MVP focuses on the student-to-student academic support workflow. Real-time chat, resource sharing, advanced administration, and production deployment are possible future enhancements.
 
-## 2. Course and project approach
-The project is developed for the KTU MCA Main Project. It uses the course-aligned 14-week milestone plan in [PROJECT_PLAN.md](PROJECT_PLAN.md), which schedules five two-week sprints, separate interim Project Assessment Board evaluations, final internal evaluation and external evaluation.
+The project follows the course-aligned 14-week schedule in [PROJECT_PLAN.md](PROJECT_PLAN.md), which plans five two-week sprints and separate interim, final internal and external evaluation milestones.
 
 ### 2.1 Scrum practices
-- Use five two-week sprints, with exact dates aligned to the academic calendar and agreed with the Scrum Master.
+- Plan five two-week sprints, with dates aligned to the academic calendar and confirmed with the Scrum Master.
 - Encourage progress meetings approximately every three days; each must be less than 15 minutes.
-- Conduct a sprint review at the end of each sprint; each must not exceed 30 minutes.
-- Demonstrate a working increment to the Product Owner / Project Guide during every sprint review.
-- Conduct the Week 6 and Week 11 interim Board evaluations separately; they do not replace sprint reviews.
-- Maintain the four Scrum Book parts: Product Backlog; Database & UI Design; Testing & Validation; Details of Versions.
-- Enter actual dates, attendance, Product Owner / Scrum Master comments, actions and evidence after each event.
+- Hold a sprint review at the end of every sprint; each must not exceed 30 minutes.
+- Demonstrate a working increment to the Product Owner / Project Guide at every review.
+- Conduct Week 6 and Week 11 interim Project Assessment Board evaluations separately from sprint reviews.
+- Maintain the four required Scrum Book parts: Product Backlog; Database & UI Design; Testing & Validation; Details of Versions.
+- Enter actual dates, attendance, feedback and actions only after events occur.
 
 ### 2.2 Course outcome / evidence mapping
 | Course outcome | EduBridge activity | Evidence |
 |---|---|---|
-| CO1 — Identify a useful real-life project | Identify the peer-learning problem and stakeholder context | Problem statement and synopsis |
+| CO1 — Identify a useful real-life project | Identify the peer-learning problem and stakeholders | Problem statement and synopsis |
 | CO2 — Interact with people to identify requirements | Consult learners/tutors and discuss requirements with Product Owner | Dated consultation log and approved backlog |
-| CO3 — Apply a development methodology | Follow Scrum with five two-week sprints | Sprint goals, check-ins, reviews and retrospectives |
+| CO3 — Apply a development methodology | Follow Scrum with five two-week sprints | Sprint goals, check-ins and reviews |
 | CO4 — Analyse and design a software product | Analyse requirements and design the system | Architecture, ERD, database and UI design |
-| CO5 — Test modules at various stages | Execute module, integration and regression tests | Test logs, defects, retests and CI evidence |
-| CO6 — Build and integrate modules | Integrate React, Express and MongoDB features | Working increments, commits and demo evidence |
+| CO5 — Test modules at various stages | Run module, integration and regression tests | Test logs, defect/retest records and CI evidence |
+| CO6 — Build and integrate modules | Integrate React, Express and MongoDB modules | Working increments, commits and demos |
 | CO7 — Document and deploy the product | Prepare report, Scrum Book and deployment material | Documentation, version register and deployment evidence |
 
 ## 3. Feasibility and requirements
