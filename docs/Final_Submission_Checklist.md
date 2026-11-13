@@ -1,89 +1,99 @@
-# EduBridge Final Submission Checklist
+# EduBridge — MCA Final Submission Checklist
 
-Use this checklist before submitting the MCA Main Project (20MCA246). It separates repository work that can be verified from evidence that must be collected by running the application and completing the academic review process.
+This checklist reflects the course requirements. It is a readiness tool, not a claim that every academic activity has already been completed. Tick an item only after verifying it and retaining evidence.
 
-## 1. Source code and repository
+## 1. Topic selection and approval — Week 1
 
-- [x] Source code is maintained in the [EduBridge GitHub repository](https://github.com/vincentcibin-a11y/EduBridge).
-- [x] README includes setup instructions, the main workflow, API overview, and links to academic documentation.
-- [x] Docker Compose configuration is checked by CI.
-- [x] CI builds the frontend and Docker images and runs backend automated tests.
-- [x] Confirm the local working tree is up to date with `upstream/main` before the final demonstration.
+- [ ] Real-life problem and social/industry relevance documented.
+- [ ] Stakeholders and intended users identified.
+- [ ] Project synopsis submitted to the Project Supervisor.
+- [ ] Prior approval from the supervisor obtained before project work begins.
+- [ ] Product Owner role confirmed: customer where one exists; otherwise Internal Guide.
+- [ ] Scrum Master (faculty / technical staff) confirmed.
+- [ ] Individual in-house project and lab attendance requirements confirmed.
+- [ ] Any exceptional external-project permission obtained in advance and eligibility confirmed with the Department.
 
-## 2. Automated validation
+## 2. Requirements and planning — Weeks 1–2
 
-- [x] Latest recorded GitHub Actions run passed: [View latest CI run](https://github.com/vincentcibin-a11y/EduBridge/actions).
-- [x] Re-run CI after any final source-code changes and confirm it passes (24/24 tests pass).
+- [ ] Stakeholder interactions performed and requirements recorded with dates.
+- [ ] Product backlog contains user stories, priorities and acceptance criteria.
+- [ ] Architecture, database design, ERD and UI design prepared.
+- [ ] Five two-week sprint goals agreed with Scrum Master / Product Owner.
+- [ ] Progress meetings arranged approximately every three days; each under 15 minutes.
+- [ ] Sprint reviews scheduled every two weeks; each no longer than 30 minutes and includes a working demo.
 
-> A passing CI run validates the checks configured in the workflow. It does not prove that every browser-based user journey has been manually tested.
+## 3. Implementation and version control
 
-## 3. Local application and Docker
+- [ ] Individual in-house project carried out unless an approved exception applies.
+- [ ] Frontend, backend and database modules integrated.
+- [ ] Git used throughout; actual commit history can be verified.
+- [ ] Meaningful commits and actual tags/releases recorded.
+- [ ] Defects tracked using GitHub Issues, BugZilla, BackLog or equivalent.
+- [ ] Test Driven Development considered/applied where suitable and documented.
+- [ ] Secrets and private data excluded from the repository.
 
-- [x] Start Docker Desktop and wait for the engine to be running.
-- [x] Run `docker compose config --quiet` from the repository root.
-- [x] Run `docker compose up --build` and confirm frontend, backend, and MongoDB start without persistent errors.
-- [x] Confirm the frontend opens at http://localhost:5173.
-- [x] Confirm the backend health endpoint at http://localhost:5000/api/health returns the expected healthy response.
-- [x] Capture a screenshot of the running application and a screenshot of `docker compose ps`.
+## 4. Sprint and evaluation evidence
 
-## 4. Manual acceptance tests
+- [ ] Sprint 1 two-week increment and Product Owner demo recorded.
+- [ ] Sprint 2 two-week increment and Product Owner demo recorded.
+- [ ] First interim Project Assessment Board evaluation (around Week 6) documented separately.
+- [ ] Sprint 3 two-week increment and Product Owner demo recorded.
+- [ ] Sprint 4 two-week increment and Product Owner demo recorded.
+- [ ] Second interim Project Assessment Board evaluation (around Week 11) documented separately.
+- [ ] Sprint 5 two-week increment and Product Owner demo recorded.
+- [ ] Week 13 final internal Project Assessment Board evaluation documented.
+- [ ] Week 14 External Examiner evaluation documented after it occurs.
 
-Complete the test cases in [Manual Acceptance Test Evidence](Manual_Acceptance_Test_Evidence.md). Mark each case Pass or Fail only after actually running it.
+## 5. Four-part Scrum Book
 
-- [x] Registration and login using two test accounts (Pass)
-- [x] Profile update and persistence after refresh (Pass)
-- [x] Create and view a doubt (Pass)
-- [x] Add an answer from the second account (Pass)
-- [x] Search for a tutor and verify the current user is excluded (Pass)
-- [x] Create a tutoring request (Pass)
-- [x] Accept and reject booking requests (Pass)
-- [x] Complete an accepted session and verify invalid repeat completion is rejected (Pass)
-- [x] Submit a review and verify duplicate review is rejected (Pass)
-- [x] Verify notifications and read/unread actions (Pass)
-- [x] Verify protected pages/actions require authentication (Pass)
-- [x] Record observed failures and create issues where appropriate (All resolved)
+- [ ] Part 1: Product Backlog — dated entries and Product Owner comments.
+- [ ] Part 2: Database & UI Design — dated design changes and reviewer comments.
+- [ ] Part 3: Testing & Validation — actual test logs, outcomes and defect records.
+- [ ] Part 4: Details of Versions — actual dates, tags and Git commit SHAs.
+- [ ] Progress meetings and sprint reviews recorded with dates, attendees and outcomes.
+- [ ] Product Owner / Scrum Master corrections clearly identified and dated.
 
-## 5. Screenshot evidence
+## 6. Testing and integration
 
-Save only screenshots that you actually captured in [`docs/evidence/`](evidence/). Follow the naming guidance in [the evidence folder README](evidence/README.md).
+- [ ] Modules tested at suitable stages.
+- [ ] Unit/API/integration tests executed and outputs retained.
+- [ ] Regression tests repeated after fixes.
+- [ ] Manual acceptance flows demonstrated in a running browser.
+- [ ] Defect log includes severity, reproduction, fix and retest result.
+- [ ] Screenshots/logs identify tested build and contain no credentials/private data.
+- [ ] GitHub Actions CI status checked on the final commit.
 
-- [x] `01-homepage.png`
-- [x] `02-registration-login.png`
-- [x] `03-profile.png`
-- [x] `04-doubt.png`
-- [x] `05-answer.png`
-- [x] `06-tutor-search.png`
-- [x] `07-booking-pending.png`
-- [x] `08-booking-status.png`
-- [x] `09-session-completed.png`
-- [x] `10-review-rating.png`
-- [x] `11-notifications.png`
-- [x] `12-docker.png`
-- [x] `13-health.png`
+## 7. Documentation and presentation
 
-A screenshot may support more than one test. Do not include passwords, tokens, secrets, or private information in evidence.
+- [ ] Project report describes actual requirements, analysis, design, implementation and limitations.
+- [ ] LaTeX or equivalent tool used for report/presentation as required.
+- [ ] Architecture diagram, ERD, UI evidence and test tables included.
+- [ ] Scrum Book submitted with report.
+- [ ] Presentation reflects final working implementation.
+- [ ] CO1–CO7 mapped to specific project evidence.
+- [ ] Student details, guide details, course title and dates checked against official records.
 
-## 6. Academic documentation and presentation
+## 8. Deployment and final evaluation
 
-- [x] Review [Project Synopsis](PROJECT_SYNOPSIS.md) and confirm problem statement and objectives.
-- [x] Review [Project Plan](PROJECT_PLAN.md) for milestone traceability and risk assessment.
-- [x] Review [Product Backlog](PRODUCT_BACKLOG.md) and confirm user stories and acceptance criteria.
-- [x] Review [Architecture Specification](ARCHITECTURE.md) and component boundaries.
-- [x] Review [Testing and Validation](TESTING_AND_VALIDATION.md) for verification evidence.
-- [x] Review [Project Documentation](EduBridge_Project_Documentation.md) for accuracy and consistency with the implemented application.
-- [x] Review the [Scrum Book](EduBridge_Scrum_Book.md) and fill in actual sprint/meeting/guide-feedback details where required. Do not invent meetings, approvals, or feedback.
-- [x] Update the manual test record with actual results and screenshot filenames.
-- [x] Finalize the presentation and ensure its screenshots and feature descriptions match the current application.
-- [x] Confirm student details, guide name, project title, and submission date are correct in every deliverable.
-- [x] Confirm the college's required submission format and whether a live production deployment is mandatory.
+- [ ] Application starts reproducibly using documented instructions.
+- [ ] Docker Compose configuration validated where used.
+- [ ] Health endpoint and core workflow smoke-tested.
+- [ ] Production deployment completed only if required/approved; URL and logs retained.
+- [ ] Production secrets configured outside source; HTTPS/CORS/database settings checked.
+- [ ] Week 13 Project Assessment Board evaluation completed and recorded.
+- [ ] Week 14 external evaluation completed by the University-appointed examiner.
+- [ ] Final report, source, presentation, Scrum Book and evidence archived as required.
 
-## 7. Final review
+## Evidence links
 
-- [x] Check that no `.env` files, credentials, API keys, or other secrets are committed.
-- [x] Confirm the repository README and documentation links open correctly.
-- [x] Make a final commit after all verified evidence and documentation updates are complete.
-- [x] Keep a copy of the final presentation and report in the required college submission format.
+- Repository: https://github.com/vincentcibin-a11y/EduBridge
+- [Project synopsis](PROJECT_SYNOPSIS.md)
+- [Project plan](PROJECT_PLAN.md)
+- [Product backlog](PRODUCT_BACKLOG.md)
+- [Scrum Book](EduBridge_Scrum_Book.md)
+- [Testing and validation](TESTING_AND_VALIDATION.md)
+- [Manual acceptance evidence](Manual_Acceptance_Test_Evidence.md)
 
 ## Submission status
 
-**Verified & Complete.** All source code, security validation, accessibility standards (WCAG 2.1 AA), responsive UI components, test evidence, and KTU MCA deliverables are complete, verified, and passing.
+**Status: To be verified by the student and Project Supervisor.** Source code, CI configuration, screenshots or templates do not independently establish synopsis approval, meeting attendance, supervisor sign-off, Board evaluation, external evaluation or production deployment.
