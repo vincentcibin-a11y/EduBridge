@@ -1,218 +1,238 @@
 # EduBridge Scrum Book
-## MCA Main Project — 20MCA246 — FISAT
+## MCA Main Project — FISAT
 
-**Project:** EduBridge – A Peer-to-Peer Academic Doubt Solving and Student Tutoring Platform  
+**Project:** EduBridge — Peer-to-Peer Academic Doubt Solving and Student Tutoring Platform  
 **Student:** Cibin Vincent  
 **Programme:** MCA  
 **Student ID:** FIT25MCA-2028  
-**Project Guide:** Ms. Senu Abi  
+**Internal Guide:** Ms. Senu Abi (confirm formal assignment)  
 **Repository:** https://github.com/vincentcibin-a11y/EduBridge
 
-> **Record-keeping note:** This Scrum Book is aligned with the KTU MCA Main Project (20MCA246) syllabus. It documents sprint activities, backlog items, automated test outcomes, verified change history, and guide interactions for the completed submission.
+> This Scrum Book follows the four prescribed parts: (1) Product Backlog, (2) Database & UI Design, (3) Testing & Validation and (4) Details of Versions. Make dated entries at regular intervals. Planned activities must remain separate from completed records. Never invent meeting attendance, feedback, approvals, test outcomes or evaluation results.
 
 ## Contents
 1. Product Backlog
-2. Database and UI Design
-3. Testing and Validation
+2. Database & UI Design
+3. Testing & Validation
 4. Details of Versions
-5. Sprint and Meeting Records
-6. Review and Submission Checklist
+5. Progress meetings
+6. Sprint reviews
+7. Project Assessment Board evaluations
+8. Product Owner / Scrum Master feedback
 
----
-
-# 1. Product Backlog
+# Part 1 — Product Backlog
 
 ## 1.1 Product vision
-EduBridge provides a college-focused peer-learning platform where students can post academic doubts, answer classmates, discover peers with relevant skills, request tutoring sessions, and review completed sessions.
 
-## 1.2 Product goals
-- Make academic doubt sharing and peer answers accessible (WCAG 2.1 AA compliant).
-- Help learners find tutors by subject, skill, and profile.
-- Support requests for online or offline tutoring.
-- Track session status and notify users about important events.
-- Encourage trustworthy peer learning through ratings and feedback.
+Provide a college-focused peer-learning platform where students can publish academic doubts, answer classmates, discover peers with relevant subject skills, request tutoring sessions and review completed sessions.
 
-## 1.3 Product backlog
+## 1.2 Backlog and acceptance criteria
 
-| ID | Backlog item | Priority | Acceptance criteria | Status |
+| ID | User story | Priority | Acceptance criteria | Implementation / status evidence |
 |---|---|---|---|---|
-| PB-01 | Student registration and login | High | Valid users can register and log in; passwords hashed; protected APIs require authentication. | **Completed & Verified** |
-| PB-02 | Student profile | High | Student can update profile, subjects, skills, and availability. | **Completed & Verified** |
-| PB-03 | Create and search doubts | High | Authenticated students can post and search doubts; inputs validated. | **Completed & Verified** |
-| PB-04 | Answer a doubt | High | Students can view a doubt and submit an answer. | **Completed & Verified** |
-| PB-05 | Discover peer tutors | High | Search supports relevant names, subjects, and skills and displays rating summaries. | **Completed & Verified** |
-| PB-06 | Request tutoring | High | Learner can request a valid future session in online/offline mode. | **Completed & Verified** |
-| PB-07 | Tutor accepts/rejects request | High | Only the assigned tutor can act on a pending request. | **Completed & Verified** |
-| PB-08 | Complete a session | High | An accepted session can be completed; repeat completion is prevented. | **Completed & Verified** |
-| PB-09 | Notifications | Medium | Users can view notifications and mark one/all as read. | **Completed & Verified** |
-| PB-10 | Rate a completed session | Medium | Learner can submit one 1–5 rating for a completed booking; tutor summary is updated. | **Completed & Verified** |
-| PB-11 | Real-time chat | Medium | Learner and tutor can exchange messages in a session. | Planned (Future Scope) |
-| PB-12 | Resource sharing | Medium | Students can share useful study resources. | Planned (Future Scope) |
-| PB-13 | Admin moderation | Low | Admin can review reported content and users. | Planned (Future Scope) |
-| PB-14 | Expanded automated tests & hardening | High | Critical API and UI flows have repeatable tests and security rate limits. | **Completed & Verified** |
+| PB-01 | As a student, I can register and log in securely | Must | Valid registration/login; password hashing; protected API rejects invalid JWT | Auth routes and automated test files exist; add actual run record |
+| PB-02 | As a student, I can manage my academic profile | Must | Profile, subjects and skills persist; protected fields cannot be overwritten | Profile API exists; record manual test |
+| PB-03 | As a learner, I can post and search academic doubts | Must | Authenticated creation; required fields validated; search returns relevant results | Doubt route exists; record create/search tests |
+| PB-04 | As a peer, I can answer an academic doubt | Must | Answer stored with author attribution and timestamp | Answer workflow exists; record test |
+| PB-05 | As a learner, I can discover a peer tutor | Must | Search by subject/skill/name; own account excluded | Tutor route exists; record filter tests |
+| PB-06 | As a learner, I can request tutoring | Must | Valid tutor/date/mode; no self-booking; state begins Pending | Booking route exists; record tests |
+| PB-07 | As a tutor, I can accept/reject a pending request | Must | Only assigned tutor can decide; invalid transitions rejected | Booking state/authorization logic exists; record negative tests |
+| PB-08 | As a participant, I can complete an accepted session | Must | Accepted → Completed once; repeated completion prevented | Completion route exists; record test |
+| PB-09 | As a user, I can view and mark notifications read | Should | Only own notices accessible; individual and read-all work | Notification route exists; record test |
+| PB-10 | As a learner, I can review a completed session | Must | Eligible learner only; rating 1–5; duplicate prevented | Review route/model exists; record test |
+| PB-11 | As participants, we can chat in real time | Could | Participant-only message exchange | Future scope; not in current MVP |
+| PB-12 | As a student, I can share learning resources | Could | Safe upload and access controls | Future scope |
+| PB-13 | As an administrator, I can moderate reports | Could | Role-protected review/audit workflow | Future scope unless implemented |
+| PB-14 | As a maintainer, I can validate the build | Must | Backend tests, frontend build and CI outcomes are repeatable and documented | Test/CI files exist; record actual latest result |
+| PB-15 | As an evaluator, I can run the application reliably | Should | Documented startup and health check; production deployment only when configured | Docker/local setup exists; production deployment not claimed |
 
-## 1.4 Definition of Done
-A backlog item is considered done when its acceptance criteria are met, automated integration tests pass, manual acceptance scenarios are verified with screenshot evidence, changes are committed, and the guide has reviewed the demonstration.
+## 1.3 Product increments
 
-## 1.5 Product increments
-- **Increment 1:** Authentication, profiles, and initial application structure.
-- **Increment 2:** Doubt posting, searching, and peer answers.
-- **Increment 3:** Tutor discovery and tutoring request workflow.
-- **Increment 4:** Notifications, session completion, ratings, and documentation.
-- **Increment 5:** Security hardening, WCAG 2.1 AA accessibility, rate limiting, and KTU deliverables.
-
----
-
-# 2. Database and UI Design
-
-## 2.1 Architecture
-- **Frontend:** React 18, Vite 6, React Router 7, Axios, responsive CSS.
-- **Backend:** Node.js 20 and Express.js 4 REST API.
-- **Database:** MongoDB 7 with Mongoose models.
-- **Authentication:** JWT (JSON Web Tokens) and bcryptjs.
-- **Version control and CI:** Git, GitHub, GitHub Actions.
-- **Local environment:** Docker Compose (3-tier stack: frontend, backend, MongoDB).
-
-## 2.2 Main data entities
-
-| Entity / collection | Purpose | Main fields / relationships |
-|---|---|---|
-| User | Student account and profile | Name, email, password hash, college, course, semester, subjects, skills, availability, reputation, ratingAverage, ratingCount |
-| Doubt | Academic question | Author (ref User), title, description, subject, tags, status, answers (user ref, content, timestamp) |
-| Booking | Tutoring request/session | Learner (ref User), tutor (ref User), subject, date/time, mode, location, notes, status, reviewedByLearner |
-| Notification | In-app event stream | Recipient (ref User), type, title, message, link, read state |
-| Review | Feedback for completed session | Booking (ref Booking, unique), learner (ref User), tutor (ref User), rating (1-5), feedback |
-
-## 2.3 Relationships
-- A user can create many doubts and answers.
-- A user can act as learner in many bookings and tutor in many bookings.
-- A completed booking has a 1-to-1 relationship with at most one learner review (`unique: true`).
-- A user can receive many notifications.
-- Reviews contribute to a tutor's rating average and rating count via Mongoose aggregation.
-
-## 2.4 UI screen register
-
-| Screen | Purpose | Key elements |
-|---|---|---|
-| Register / Login | Account access | Form validation, password constraints, accessible labels |
-| Dashboard | Entry point | Statistics overview, quick links, 4-step workflow guide |
-| Doubt Board | Academic doubts | Search bar, subject filters, ask doubt form, answer thread |
-| Tutor Discovery | Peer search | Search by subject/skill, tutor card with rating and availability, booking modal |
-| Sessions | Tutoring lifecycle | Pending requests, accept/reject, mark complete, verified review form |
-| Notifications | Activity feed | Unread counter, mark as read, mark all read, event timestamps |
-| Profile | Skills management | Course, semester, editable subjects and skills, reputation display |
-
----
-
-# 3. Testing and Validation
-
-## 3.1 Test strategy
-- Unit and security tests for rate limiting, CORS, input sanitization, and token claims.
-- End-to-end integration tests using MongoDB for the complete student workflow.
-- Frontend production bundle build verification via Vite.
-- Manual browser acceptance tests (AT-01 to AT-14) against running instances with screenshot evidence.
-
-## 3.2 Test cases
-
-| Test ID | Scenario | Expected result | Status | Evidence |
-|---|---|---|---|---|
-| TC-01 | Register with valid details | Account is created | **Pass** | Automated + [`02-registration-login.png`](evidence/02-registration-login.png) |
-| TC-02 | Register with invalid email or missing fields | Validation error | **Pass** | Automated test in `app.test.js` |
-| TC-03 | Login with valid credentials | User receives authenticated response | **Pass** | Automated + [`02-registration-login.png`](evidence/02-registration-login.png) |
-| TC-04 | Login with incorrect password | Safe authentication error | **Pass** | Automated test in `app.test.js` |
-| TC-05 | Access protected API without token | Request is rejected (401) | **Pass** | Automated test in `app.test.js` |
-| TC-06 | Create a valid doubt | Doubt is saved and returned | **Pass** | Automated + [`04-doubt.png`](evidence/04-doubt.png) |
-| TC-07 | Search doubts using special characters | Search is handled safely via regex escaping | **Pass** | Automated + Manual |
-| TC-08 | Submit a valid answer | Answer is saved and author attributed | **Pass** | Automated + [`05-answer.png`](evidence/05-answer.png) |
-| TC-09 | Request a future tutoring session | Pending booking is created | **Pass** | Automated + [`07-booking-pending.png`](evidence/07-booking-pending.png) |
-| TC-10 | Attempt self-booking or past booking | Request is rejected (400) | **Pass** | Automated test in `app.test.js` |
-| TC-11 | Accept/reject a non-pending booking | Invalid transition is rejected (409) | **Pass** | Automated test in `integration.test.js` |
-| TC-12 | Complete an accepted booking | Booking becomes completed once (+5 reputation) | **Pass** | Automated + [`09-session-completed.png`](evidence/09-session-completed.png) |
-| TC-13 | Submit review for completed booking | Review is saved and tutor summary updated | **Pass** | Automated + [`10-review-rating.png`](evidence/10-review-rating.png) |
-| TC-14 | Submit duplicate review | Duplicate is rejected (409 Conflict) | **Pass** | Automated test in `integration.test.js` |
-| TC-15 | Mark notification(s) as read | Read state is updated | **Pass** | Automated + [`11-notifications.png`](evidence/11-notifications.png) |
-| TC-16 | Run frontend production build | Build completes successfully in ~6.6s | **Pass** | Production build verified |
-| TC-17 | Update profile and search tutor by subject | Profile saved; matching tutor appears; self excluded | **Pass** | Automated + [`06-tutor-search.png`](evidence/06-tutor-search.png) |
-| TC-18 | Mark one/all notifications read and attempt cross-user access | Read state updates; foreign notification forbidden | **Pass** | Automated test in `integration.test.js` |
-| TC-19 | Reject a pending booking and attempt completion | Booking is rejected; completion rejected | **Pass** | Automated test in `integration.test.js` |
-
-## 3.3 Defect log
-
-| Defect ID | Date | Description | Severity | Fix / commit | Retest result |
-|---|---|---|---|---|---|
-| DEF-01 | 28/10/2026 | Non-object JSON body rejected with unhandled 500 | Low | `e426d7e` (Added JSON shape guard) | **Pass** |
-| DEF-02 | 28/10/2026 | Malformed JWT claims allowed protected route access | Medium | `b691956` (Harden JWT payload claims) | **Pass** |
-
-## 3.4 Validation evidence
-Screenshots and evidence logs are recorded in [`docs/evidence/`](evidence/).
-
----
-
-# 4. Details of Versions
-
-## 4.1 Versioning approach
-Git commits record incremental development milestones:
-
-| Version / increment | Main scope | Evidence |
-|---|---|---|
-| v0.1 | Project scaffold, frontend/backend setup | `76cf73d` / `37265a8` |
-| v0.2 | Authentication and student profiles | `668031c` / `1ce507e` |
-| v0.3 | Doubts, tags, and peer answers | `90390c6` / `72b548c` |
-| v0.4 | Tutor discovery and booking workflow | `41fb3ef` / `c3740be` |
-| v0.5 | Notifications, reviews, rating aggregation | `cecb6a8` / `f8bc88d` |
-| v1.0 | KTU Main Project hardened submission build | `4f0baba` / `main` |
-
-## 4.2 Verified repository changes
-
-| Date (UTC) | Commit | Change |
-|---|---|---|
-| 2026-09-26 | `9f2e47e` | Add backend API integration coverage |
-| 2026-09-26 | `ff049fc` | Run backend integration tests with MongoDB in CI |
-| 2026-09-26 | `76cf73d` | Add Docker Compose development environment |
-| 2026-09-27 | `2914f08` | Add syllabus-aligned Scrum Book |
-| 2026-09-27 | `534642c` | Add MCA mini project documentation |
-| 2026-09-27 | `6dfabc3` | Expand integration coverage for profiles, tutor search, notifications, and rejection |
-| 2026-09-27 | `98a3f8d` | Build Docker images as part of CI validation |
-| 2026-10-27 | `201900a` | Complete academic deliverables, harden security, and enhance accessibility |
-| 2026-10-28 | `b691956` | Harden JWT payload validation |
-| 2026-10-28 | `e426d7e` | Reject invalid JSON payload shapes |
-| 2026-10-28 | `4f0baba` | Fix duplicate and align JSON payload test |
-
----
-
-# 5. Sprint and Meeting Records
-
-## 5.1 Sprint cadence
-Two-week sprint increments with regular reviews and demonstrations with the Project Guide, Ms. Senu Abi.
-
-## 5.2 Sprint execution summary
-
-| Sprint | Focus | Outcome & Review Evidence |
-|---|---|---|
-| Sprint 1 | Project setup, Express/React architecture, Auth & JWT | Registration/login demonstration verified |
-| Sprint 2 | Doubt board, rich answers, tags, search filtering | Doubt asking and answering flow verified |
-| Sprint 3 | Tutor directory, profile skills, scheduling & booking | Booking state machine demonstration verified |
-| Sprint 4 | Notifications stream, session completion, verified reviews | End-to-end review and rating workflow verified |
-| Sprint 5 | Security hardening, rate limiting, WCAG 2.1 AA accessibility, Docker CI | Hardened submission build and full documentation suite |
-
-## 5.3 Guide feedback and correction log
-
-| Date | Feedback | Action taken | Verified by |
+| Increment | Sprint | Planned scope | Demo acceptance |
 |---|---|---|---|
-| 10/09/2026 | Emphasize peer-learning accessibility and course relevance | Added WCAG 2.1 AA landmarks, ARIA labels, and college filters | Ms. Senu Abi |
-| 18/09/2026 | Ensure tutoring sessions enforce valid state transitions | Implemented FSM (pending → accepted/rejected → completed) | Ms. Senu Abi |
-| 29/09/2026 | Include comprehensive automated test evidence and review ratings | Added 24 automated tests + verified review aggregation | Ms. Senu Abi |
+| 1 | Sprint 1 | Scaffold, registration/login and profile | Register, authenticate, view/update profile |
+| 2 | Sprint 2 | Doubt board, search, answers and resolution | One student posts; another answers; author resolves |
+| 3 | Sprint 3 | Tutor discovery and booking request lifecycle | Search by subject/skill; create and decide request |
+| 4 | Sprint 4 | Completion, notifications and reviews | Complete accepted session and submit eligible review |
+| 5 | Sprint 5 | Security/accessibility refinement, regression, docs and deployment readiness | Integrated release candidate and test evidence |
 
----
+## 1.4 Backlog refinement register
 
-# 6. Review and Submission Checklist
+| Date | Stakeholder / attendee role | Need or feedback | Decision / changed IDs | Owner / target |
+|---|---|---|---|---|
+| To be entered after actual discussion | | | | |
 
-- [x] Product backlog updated with actual status.
-- [x] Database design and ERD match the implemented schemas.
-- [x] UI screenshots are from the current running application.
-- [x] Test results are based on executed tests (24/24 passed).
-- [x] Defects and retest results are recorded.
-- [x] Version table contains actual commit SHAs and dates.
-- [x] Sprint review dates, attendance, demos, and guide feedback are recorded.
-- [x] Repository and CI links are current.
-- [x] Final document reviewed by the Project Guide.
+# Part 2 — Database & UI Design
+
+## 2.1 Technology and architecture
+
+- Frontend: React 18, Vite, React Router and Axios.
+- Backend: Node.js, Express REST API and middleware.
+- Database: MongoDB with Mongoose.
+- Authentication: JWT and bcryptjs password hashing.
+- Version control: Git and GitHub.
+- CI: GitHub Actions.
+- Local packaging: Docker Compose.
+
+The system follows a three-tier architecture: React presentation layer → Express application/API layer → MongoDB persistence layer.
+
+## 2.2 Database design register
+
+| Entity | Purpose | Relationships |
+|---|---|---|
+| User | Student account, academic profile, skills and rating summary | Referenced by doubts, bookings, notifications and reviews |
+| Doubt | Academic question, tags, status and embedded answers | Author references User; embedded answer authors reference User |
+| Booking | Tutoring session request and lifecycle | Learner and tutor reference User |
+| Notification | User-specific event and read state | Recipient references User |
+| Review | Feedback for completed booking | Booking-linked review; learner/tutor reference User |
+
+### Dated database design entries
+
+| Date | Design decision / change | Reason | Product Owner / reviewer comment |
+|---|---|---|---|
+| To be entered when design is reviewed or changed | | | |
+
+## 2.3 UI screen register
+
+| Screen | Purpose | Main controls / information |
+|---|---|---|
+| Registration / Login | Authentication | Registration fields, login and validation |
+| Dashboard | Main entry point | Navigation, profile summary and workflow shortcuts |
+| Profile | Academic profile | Course, semester, subjects, skills and availability |
+| Doubt Board | Academic question sharing | Create/search doubts, subject/tags and status |
+| Doubt Details | Peer discussion | Doubt content and answer thread |
+| Tutor Discovery | Find peer support | Name/subject/skill search, tutor details and booking action |
+| Sessions | Manage tutoring workflow | Pending/accepted/rejected/completed states and actions |
+| Notifications | Activity updates | Unread count and read/read-all controls |
+
+### Dated UI design entries
+
+| Date | Screen / design change | User need / reason | Reviewer comment / action |
+|---|---|---|---|
+| To be entered when UI is reviewed or changed | | | |
+
+# Part 3 — Testing & Validation
+
+## 3.1 Test approach
+
+- Unit/module and middleware tests for validation, authentication, authorization and business rules.
+- API tests for endpoints, status codes, payloads and ownership restrictions.
+- MongoDB-backed integration tests for connected workflows.
+- Regression tests after defects and sprint integration.
+- Frontend production build checks.
+- Manual browser acceptance tests with dated screenshots.
+- CI runs on GitHub Actions.
+
+Use Test Driven Development where appropriate. A test is marked Pass only after it has actually run. Keep automated, manual and CI evidence separate.
+
+## 3.2 Test catalogue
+
+| ID | Scenario | Expected result | Actual result / status / evidence |
+|---|---|---|---|
+| AUTH-01 | Register valid user | Account created safely | To be recorded after execution |
+| AUTH-02 | Invalid registration / wrong password | Safe validation/authentication error | To be recorded after execution |
+| AUTH-03 | Protected API without valid JWT | Request denied | To be recorded after execution |
+| PROF-01 | Update and reload profile | Changes persist | To be recorded after execution |
+| DOUBT-01 | Create/search/view doubt | Valid doubt is available | To be recorded after execution |
+| DOUBT-02 | Submit answer | Answer appears with author | To be recorded after execution |
+| TUTOR-01 | Search by subject/skill | Matching peers; self excluded | To be recorded after execution |
+| BOOK-01 | Request future tutoring session | Booking becomes Pending | To be recorded after execution |
+| BOOK-02 | Assigned tutor accepts/rejects | Valid transition only | To be recorded after execution |
+| BOOK-03 | Unauthorized/invalid/repeated transition | Request rejected safely | To be recorded after execution |
+| BOOK-04 | Complete accepted session | Completed once | To be recorded after execution |
+| NOTIF-01 | Mark one/all notifications read | Own notification state updates | To be recorded after execution |
+| REV-01 | Review eligible completed booking | One valid review accepted | To be recorded after execution |
+| REV-02 | Duplicate/ineligible review | Request rejected | To be recorded after execution |
+| BUILD-01 | Run frontend production build | Vite build completes | To be recorded after execution |
+| CI-01 | Run GitHub Actions workflow | Configured jobs complete | Add actual run URL and result |
+
+## 3.3 Test execution log
+
+| Date/time | Commit SHA | Test IDs / command | Environment | Pass / Fail / Blocked | Evidence / log |
+|---|---|---|---|---|---|
+| Enter immediately after a real run | | | | | |
+
+## 3.4 Defect register
+
+| Defect ID | Date | Description | Severity | Reproduction / issue | Fix commit | Retest result |
+|---|---|---|---|---|---|---|
+| Enter when a defect is found | | | | | | |
+
+## 3.5 Evidence guidance
+
+Existing files under `docs/evidence/` can be referenced after confirming their capture date and tested build. A screenshot supports only the visible state; it does not prove every negative case. Retain command output, environment, commit SHA and actual test result.
+
+# Part 4 — Details of Versions
+
+## 4.1 Version register
+
+| Date | Version / tag | Commit SHA | Change / modules | Tests and evidence |
+|---|---|---|---|---|
+| Populate from actual Git history | | | | |
+
+## 4.2 Git practice
+
+Use Git throughout development. Make focused commits with meaningful messages and use feature branches/pull requests where practical. Keep secrets out of source control. Do not fabricate or backdate commits to fit a sprint timeline.
+
+```bash
+git checkout -b feature/doubt-search
+git add .
+git commit -m "feat: add academic doubt search"
+git push -u origin feature/doubt-search
+```
+
+# Progress meeting register — approximately every three days
+
+The course encourages brief progress meetings approximately once every three days. Each meeting should be less than 15 minutes. Add actual date, attendees, progress, blocker and Scrum Master guidance after the meeting.
+
+| No. | Date/time | Attendees | Completed work | Next tasks | Blocker | Scrum Master comment / action |
+|---:|---|---|---|---|---|---|
+| 1 | To be recorded | | | | | |
+| 2 | To be recorded | | | | | |
+| 3 | To be recorded | | | | | |
+
+# Two-week sprint review register
+
+Each sprint lasts two weeks. Every review should be no longer than 30 minutes and must include a working demo to the Product Owner / Project Guide.
+
+| Sprint | Dates | Review date | Demo / commit | Attendees | Product Owner feedback | Action / owner | Evidence |
+|---|---|---|---|---|---|---|---|
+| 1 | To confirm | To record | | | | | |
+| 2 | To confirm | To record | | | | | |
+| 3 | To confirm | To record | | | | | |
+| 4 | To confirm | To record | | | | | |
+| 5 | To confirm | To record | | | | | |
+
+# Project Assessment Board register
+
+The HOD constitutes the five-member Board: HOD (Chair), project supervisor(s), one Department faculty member, one sister-Department faculty member and an external expert. For eligible external projects, the External Guide may be invited as external expert.
+
+| Evaluation | Course week | Actual date | Presentation / demo | Board comments | Corrective action / owner | Evidence |
+|---|---:|---|---|---|---|---|
+| First interim | 6 | To be recorded | | | | |
+| Second interim | 11 | To be recorded | | | | |
+| Final internal | 13 | To be recorded | | | | |
+| External | 14 | To be recorded | | | | |
+
+# Product Owner / Scrum Master feedback register
+
+Record actual corrections and comments with their dates. If no feedback has yet been received, leave the row blank rather than inventing it.
+
+| Date | Reviewer role | Feedback / correction | Change made | Commit / evidence | Follow-up |
+|---|---|---|---|---|---|
+| To be recorded after feedback | | | | | |
+
+## Final checks
+
+- [ ] Synopsis submitted and approval recorded.
+- [ ] Product Owner and Scrum Master roles confirmed.
+- [ ] Stakeholder interactions recorded.
+- [ ] Five two-week sprints and reviews documented.
+- [ ] Progress meetings recorded at prescribed cadence where held.
+- [ ] First and second interim Board evaluations recorded.
+- [ ] Final internal and external evaluation recorded after occurrence.
+- [ ] Four parts maintained with dated entries.
+- [ ] Tests, defects, retests and evidence are genuine and traceable.
+- [ ] Git commits and releases match actual repository history.
+- [ ] Report and presentation match final code.
+- [ ] Deployment status accurately described; no unsupported production claim.
