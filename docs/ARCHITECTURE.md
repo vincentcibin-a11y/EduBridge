@@ -1,190 +1,210 @@
 # EduBridge Architecture Specification
 
-## 1. Overview & System Context
+## 1. Overview
 
-EduBridge is a modular three-tier web application designed for academic doubt solving and peer tutoring across college campuses.
+EduBridge is a three-tier web application for student peer learning. The React frontend presents doubt-sharing, tutor-discovery and session workflows. The Express backend exposes REST APIs and applies validation, authentication, authorisation and business rules. MongoDB stores the application data through Mongoose models.
 
 ```mermaid
 flowchart TD
-    subgraph ClientLayer["Frontend Client (React 18 + Vite)"]
-        UI["Accessible Responsive UI (WCAG 2.1 AA)"]
-        State["Client State & Routing (React Router 7)"]
-        AxiosClient["Axios HTTP Client + JWT Interceptor"]
-        UI --> State --> AxiosClient
-    end
-
-    subgraph APILayer["Backend API Gateway (Express 4 / Node.js 20)"]
-        SecurityMW["Security Headers + CORS + Rate Limiter"]
-        AuthMW["JWT Bearer Authentication Middleware"]
-        Controllers["Resource Controllers"]
-        
-        subgraph Endpoints["Route Controllers"]
-            AuthR["/api/auth"]
-            DoubtsR["/api/doubts"]
-            TutorsR["/api/tutors"]
-            BookingsR["/api/bookings"]
-            NotifsR["/api/notifications"]
-            ReviewsR["/api/reviews"]
-        end
-        
-        SecurityMW --> AuthMW --> Controllers
-        Controllers --> Endpoints
-    end
-
-    subgraph DataLayer["Persistence Layer (MongoDB 7)"]
-        MongooseODM["Mongoose ODM (Schema & Validation)"]
-        Collections[("Collections: Users, Doubts, Bookings, Notifications, Reviews")]
-        MongooseODM --> Collections
-    end
-
-    AxiosClient -- "HTTPS / JSON + Bearer Token" --> SecurityMW
-    Endpoints --> MongooseODM
+    U[Student / Browser] --> FE[React 18 + Vite Frontend]
+    FE -->|Axios REST / JSON| API[Node.js + Express API]
+    API --> MW[Validation / JWT / Authorization Middleware]
+    MW --> R[Feature Routes]
+    R --> DB[Mongoose ODM]
+    DB --> M[(MongoDB)]
+    R --> AUTH[Auth and Profiles]
+    R --> D[Doubts and Answers]
+    R --> T[Tutor Search]
+    R --> B[Bookings]
+    R --> N[Notifications]
+    R --> RV[Reviews]
 ```
 
----
+## 2. Component design
 
-## 2. Component Design
+### 2.1 Presentation layer — frontend
 
-### 2.1 Frontend Architecture (`frontend/`)
-The frontend client provides responsive, accessible interfaces built with React 18:
-- **Authentication**: JWT login, registration, college profile onboarding.
-- **Academic Doubt Board**: Create questions, search by tags and keywords, post peer answers, and mark questions resolved.
-- **Tutor Discovery**: Discover peer tutors by subject, skill tags, reputation score, and rating averages.
-- **Session Management**: Send session requests (online/offline), accept/reject incoming bookings, mark sessions completed.
-- **Activity & Notifications**: Real-time unread activity counters, instant mark-as-read, and deep links.
-- **Session Reviews**: Post-completion rating (1–5 stars) and qualitative feedback.
-- **Accessibility Engine**: Semantic HTML5 landmarks, ARIA live regions, keyboard focus traps, skip-to-content links, and responsive navigation.
+The React client provides:
+- Registration and login.
+- Student dashboard and profile.
+- Academic doubt listing, creation, search and answer threads.
+- Tutor discovery and tutor profile.
+- Tutoring session requests and booking status management.
+- Notifications and read-state controls.
+- Review submission for completed sessions.
 
-### 2.2 Backend Architecture (`backend/`)
-The Express application implements a RESTful service structure:
-- `middleware/rateLimiter.js`: In-memory rate limiting to protect authentication routes from brute force and mitigate denial-of-service attempts.
-- `middleware/auth.js`: Cryptographic JWT verification and user context hydration.
-- `routes/auth.js`: Registration, bcrypt hashing, credential authentication, and profile mutations.
-- `routes/doubts.js`: Academic question publishing, regex-escaped queries, peer answer threads, and status updates.
-- `routes/tutors.js`: Tutor index with fuzzy subject/skill filtering and reputation ranking.
-- `routes/bookings.js`: Finite state machine managing booking lifecycle:
-  ```mermaid
-  stateDiagram-v2
-      [*] --> Pending: Learner requests session
-      Pending --> Accepted: Tutor accepts request
-      Pending --> Rejected: Tutor rejects request
-      Accepted --> Completed: Either party marks session completed
-      Completed --> [*]: Learner submits review
-  ```
-- `routes/notifications.js`: Inbox event stream and read receipt updates.
-- `routes/reviews.js`: Post-session evaluation, duplicate review prevention, and incremental tutor rating aggregation.
+The frontend calls the backend through Axios. Client-side validation improves usability; server-side validation remains authoritative.
 
----
+### 2.2 Application layer — backend
 
-## 3. Data Model & Entity Relationships
+The Node.js/Express API validates requests, verifies JWTs, checks resource ownership and applies application rules.
+
+| Component | Responsibility |
+|---|---|
+| `backend/server.js` | Server startup and database connection |
+| `backend/app.js` | Express application, common middleware and route registration |
+| `backend/middleware/auth.js` | JWT verification and authenticated user context |
+| `backend/middleware/rateLimiter.js` | Request rate limiting |
+| `backend/routes/auth.js` | Registration, login and profile |
+| `backend/routes/doubts.js` | Doubt listing, creation, answers and status |
+| `backend/routes/tutors.js` | Peer tutor discovery |
+| `backend/routes/bookings.js` | Tutoring request lifecycle |
+| `backend/routes/notifications.js` | User-specific notifications |
+| `backend/routes/reviews.js` | Review eligibility and tutor feedback |
+
+### 2.3 Data layer — MongoDB
+
+Mongoose models define the persistent documents.
+
+| Model | Purpose |
+|---|---|
+| User | Account, profile, subject/skill details and rating summary |
+| Doubt | Academic question, tags, status and embedded answers |
+| Booking | Learner/tutor session request and state |
+| Notification | Recipient, event content and read flag |
+| Review | Booking-linked rating and feedback |
+
+## 3. Logical data relationships
 
 ```mermaid
 erDiagram
-    USER ||--o{ DOUBT : "authors"
-    USER ||--o{ BOOKING : "participates as learner"
-    USER ||--o{ BOOKING : "participates as tutor"
-    USER ||--o{ REVIEW : "writes/receives"
-    USER ||--o{ NOTIFICATION : "receives"
-    DOUBT ||--o{ ANSWER : "contains"
-    BOOKING ||--o| REVIEW : "rated via"
+    USER ||--o{ DOUBT : authors
+    USER ||--o{ BOOKING : learner
+    USER ||--o{ BOOKING : tutor
+    USER ||--o{ NOTIFICATION : receives
+    USER ||--o{ REVIEW : participates
+    DOUBT ||--o{ ANSWER : contains
+    BOOKING ||--o| REVIEW : has
 
     USER {
-        ObjectId _id PK
-        string name
-        string email UK
-        string password
-        string college
-        string course
-        string semester
-        string bio
-        array skills
-        array subjects
-        string availability
-        number reputation
-        number ratingAverage
-        number ratingCount
-        string role
-        date createdAt
+      ObjectId _id
+      string name
+      string email
+      string password
+      string college
+      string course
+      string semester
+      string bio
+      array subjects
+      array skills
+      string availability
+      number reputation
+      number ratingAverage
+      number ratingCount
     }
-
     DOUBT {
-        ObjectId _id PK
-        string title
-        string description
-        string subject
-        array tags
-        string status
-        ObjectId author FK
-        array answers
-        date createdAt
+      ObjectId _id
+      ObjectId author
+      string title
+      string description
+      string subject
+      array tags
+      string status
+      array answers
     }
-
     BOOKING {
-        ObjectId _id PK
-        ObjectId learner FK
-        ObjectId tutor FK
-        string subject
-        string mode
-        string date
-        string time
-        string location
-        string notes
-        string status
-        boolean reviewedByLearner
-        date createdAt
+      ObjectId _id
+      ObjectId learner
+      ObjectId tutor
+      string subject
+      string date
+      string time
+      string mode
+      string status
     }
-
-    REVIEW {
-        ObjectId _id PK
-        ObjectId booking FK,UK
-        ObjectId learner FK
-        ObjectId tutor FK
-        number rating
-        string feedback
-        date createdAt
-    }
-
     NOTIFICATION {
-        ObjectId _id PK
-        ObjectId recipient FK
-        string type
-        string title
-        string message
-        string link
-        boolean read
-        date createdAt
+      ObjectId _id
+      ObjectId recipient
+      string type
+      string title
+      string message
+      boolean read
+    }
+    REVIEW {
+      ObjectId _id
+      ObjectId booking
+      ObjectId learner
+      ObjectId tutor
+      number rating
+      string feedback
     }
 ```
 
----
+Doubt answers are embedded subdocuments, not a separate collection. Verify exact model fields and indexes against the final Mongoose schemas before submission.
 
-## 4. Security & Compliance Boundaries
+## 4. Main application workflows
 
-1. **Authentication & Secret Safety**:
-   - Passwords salted and hashed with `bcryptjs`.
-   - JWT tokens signed with a cryptographically enforced secret (`>= 32` characters in production).
-   - `.env` excluded from version control; templates documented in `.env.example`.
-2. **Defensive Validation**:
-   - Maximum payload bounds (1 MB request size limit).
-   - Input type, string length, and format enforcement on all endpoints.
-   - ReDoS protection via strict query regex escaping (`escapeRegex`).
-3. **Authorization & Role Integrity**:
-   - Booking transitions verified against learner/tutor object IDs.
-   - Review creation restricted to the verified learner of a completed session.
-   - Notifications restricted to the target recipient.
-4. **Transport & Network Controls**:
-   - Controlled CORS origin white-listing.
-   - HTTP response hardening (`X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: no-referrer`, `Cache-Control: no-store`).
-   - Rate limiting on sensitive endpoints.
+### 4.1 Doubt-solving workflow
 
----
+```mermaid
+flowchart TD
+    A[Student logs in] --> B[Create academic doubt]
+    B --> C[Peer searches and views doubt]
+    C --> D[Peer posts answer]
+    D --> E[Question author reviews answer]
+    E --> F[Author marks doubt resolved]
+```
 
-## 5. DevOps & Continuous Integration Pipeline
+### 4.2 Tutoring workflow
 
-GitHub Actions executes the automated quality pipeline on every push and pull request:
-1. Validates `docker-compose.yml` structure.
-2. Builds frontend and backend Docker container images.
-3. Installs dependencies using `npm ci`.
-4. Performs AST syntax validation across all backend JavaScript modules (`node --check`).
-5. Executes automated unit and integration tests against a live MongoDB 7 service container.
-6. Builds the production frontend bundle using Vite (`vite build`).
+```mermaid
+stateDiagram-v2
+    [*] --> Pending: Learner creates request
+    Pending --> Accepted: Assigned tutor accepts
+    Pending --> Rejected: Assigned tutor rejects
+    Accepted --> Completed: Permitted participant completes
+    Completed --> [*]: Eligible learner posts review
+    Rejected --> [*]
+```
+
+## 5. Security and validation boundaries
+
+- Passwords are hashed with bcryptjs.
+- Protected APIs use JWT authentication.
+- Resource ownership is checked for user-specific operations.
+- Booking decisions and completion follow explicit state rules.
+- Review submission is restricted to eligible completed bookings.
+- Request types, lengths and database identifiers are validated server-side.
+- Rate limiting and defensive response headers are configured in the API.
+- Production JWT secrets and database credentials must be injected through protected environment settings, never committed to source control.
+
+## 6. Git, testing and delivery pipeline
+
+```mermaid
+flowchart TD
+    DEV[Developer change] --> GIT[Git commit / GitHub]
+    GIT --> CI[GitHub Actions]
+    CI --> C1[Compose configuration check]
+    CI --> C2[Backend syntax and tests]
+    CI --> C3[MongoDB CI service]
+    CI --> C4[Frontend production build]
+    CI --> IMG[Docker image build]
+    IMG --> READY[Validated build]
+    READY --> DEPLOY[Approved deployment stage — proposed]
+    DEPLOY --> HEALTH[Health / smoke test]
+```
+
+The repository currently provides continuous integration and Docker image build validation. The deployment stage in this diagram is proposed; it is not a claim that production deployment is automated or completed.
+
+## 7. Deployment requirements
+
+Before a public production deployment:
+1. Select and approve the hosting provider.
+2. Configure a production MongoDB database and strong JWT secret through protected environment variables.
+3. Configure the frontend origin and CORS.
+4. Enable HTTPS and suitable logging/backup practices.
+5. Deploy the exact validated commit or release tag.
+6. Run the API health check and critical smoke tests.
+7. Record deployed URL, date, commit SHA, logs and rollback plan.
+
+## 8. Course outcome traceability
+
+| Course outcome | Architecture / engineering evidence |
+|---|---|
+| CO1 — Real-life project selection | Peer-learning problem statement and stakeholder context |
+| CO2 — Requirements discovery | Actual learner/tutor and guide consultation records |
+| CO3 — Development methodology | Five two-week Scrum increments, check-ins and reviews |
+| CO4 — Analysis and design | Requirements, architecture, ERD and UI design |
+| CO5 — Module testing | API/integration tests, regression runs, manual acceptance and CI |
+| CO6 — Build and integration | Integrated React, Express and MongoDB modules |
+| CO7 — Documentation and deployment | Synopsis, report, Scrum Book, version register and deployment evidence |
