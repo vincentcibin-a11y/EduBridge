@@ -8,7 +8,7 @@
 **Institution:** Federal Institute of Science and Technology (FISAT), Angamaly  
 **Repository:** https://github.com/vincentcibin-a11y/EduBridge
 
-> This document describes the project and its comprehensive scope for the KTU MCA Main Project (Course Code: 20MCA246). Cross-reference with [Project Synopsis](PROJECT_SYNOPSIS.md), [Project Plan](PROJECT_PLAN.md), [Product Backlog](PRODUCT_BACKLOG.md), [Architecture Specification](ARCHITECTURE.md), and [Testing and Validation](TESTING_AND_VALIDATION.md).
+> **Course-guideline alignment:** This project is planned against the 14-week milestone schedule and five two-week Scrum sprints. See [Project Plan](PROJECT_PLAN.md). The Scrum Book is organised into the four required parts: Product Backlog; Database & UI Design; Testing & Validation; Details of Versions. Actual stakeholder consultations, approval, meetings, Product Owner feedback, Board evaluations, external evaluation and deployment must be recorded only after they occur.
 
 ## Abstract
 EduBridge is a college-focused peer-learning web application intended to connect students who need academic help with peers who can explain concepts or provide tutoring. Students can create academic doubts, search questions, post answers, discover tutors by subject and skill, request online or offline sessions, manage tutoring requests, receive in-app notifications, and review completed sessions. The system uses React and Vite for the frontend, Node.js and Express for the backend, MongoDB with Mongoose for persistence, and JWT-based authentication with bcrypt password hashing. The project applies an iterative Scrum approach and uses GitHub for source control and continuous integration.
@@ -33,25 +33,27 @@ Students need a convenient way to post academic doubts, receive peer answers, id
 The current MVP focuses on the student-to-student academic support workflow. Real-time chat, resource sharing, advanced administration, and production deployment are possible future enhancements.
 
 ## 2. Course and project approach
-The project is developed for the KTU MCA Main Project course (20MCA246). Work is organized as incremental deliverables with a formal product backlog, project schedule, architecture design records, testing records, and version history.
+The project is developed for the KTU MCA Main Project. It uses the course-aligned 14-week milestone plan in [PROJECT_PLAN.md](PROJECT_PLAN.md), which schedules five two-week sprints, separate interim Project Assessment Board evaluations, final internal evaluation and external evaluation.
 
 ### 2.1 Scrum practices
-- Organize work into approximately two-week sprints.
-- Review the increment every two weeks.
-- Keep sprint reviews within 30 minutes.
-- Demonstrate the increment to the Project Guide/Product Owner at each review.
-- Hold brief progress meetings approximately once every three days where practical.
-- Record actual dates, feedback, action items, and evidence in the Scrum Book.
+- Use five two-week sprints, with exact dates aligned to the academic calendar and agreed with the Scrum Master.
+- Encourage progress meetings approximately every three days; each must be less than 15 minutes.
+- Conduct a sprint review at the end of each sprint; each must not exceed 30 minutes.
+- Demonstrate a working increment to the Product Owner / Project Guide during every sprint review.
+- Conduct the Week 6 and Week 11 interim Board evaluations separately; they do not replace sprint reviews.
+- Maintain the four Scrum Book parts: Product Backlog; Database & UI Design; Testing & Validation; Details of Versions.
+- Enter actual dates, attendance, Product Owner / Scrum Master comments, actions and evidence after each event.
 
-### 2.2 Learning outcomes / evidence mapping
-| Project activity | Evidence |
-|---|---|
-| Requirements and planning | Product backlog and acceptance criteria |
-| System design | Architecture, data model, and UI screen register |
-| Implementation | Repository source code and commit history |
-| Validation | Executed test cases, defect log, CI output |
-| Iterative development | Sprint plans, reviews, and feedback records |
-| Final reporting | This document and the Scrum Book |
+### 2.2 Course outcome / evidence mapping
+| Course outcome | EduBridge activity | Evidence |
+|---|---|---|
+| CO1 — Identify a useful real-life project | Identify the peer-learning problem and stakeholder context | Problem statement and synopsis |
+| CO2 — Interact with people to identify requirements | Consult learners/tutors and discuss requirements with Product Owner | Dated consultation log and approved backlog |
+| CO3 — Apply a development methodology | Follow Scrum with five two-week sprints | Sprint goals, check-ins, reviews and retrospectives |
+| CO4 — Analyse and design a software product | Analyse requirements and design the system | Architecture, ERD, database and UI design |
+| CO5 — Test modules at various stages | Execute module, integration and regression tests | Test logs, defects, retests and CI evidence |
+| CO6 — Build and integrate modules | Integrate React, Express and MongoDB features | Working increments, commits and demo evidence |
+| CO7 — Document and deploy the product | Prepare report, Scrum Book and deployment material | Documentation, version register and deployment evidence |
 
 ## 3. Feasibility and requirements
 
